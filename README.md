@@ -6,17 +6,17 @@ when pushing, a github workflow loads the free Code playground [LiveCodes](https
 
 # How to add new examples?
 
-Here is a Step-by-Step instruction for an new example named "TESTNAME".
+Here is a Step-by-Step instruction for an new example named "$NAME".
 
 1. Open [LiveCodes at https://versatiles.org/playground/livecodes](https://versatiles.org/playground/livecodes) and write your code. If you need help, check the [documentation of LiveCodes](https://livecodes.io/docs/features/)
 
-2. Export the result using (Menu > Project > Export > Export Result (HTML)) and save the HTML file as `examples/TESTNAME.html`.
+2. Export the result using `Menu` > `Project` > `Export` > `Export Project (JSON)` and save the JSON file as `examples/$NAME.json`.
 
 3. Update the top-level `index.html` by adding a new line:
 ```html
 <ul>
 	...
-	<li><a href="examples/TESTNAME.html">new example showing something</a></li>
+	<li><a href="examples/$NAME">new example showing something</a></li>
 </ul>
 ```
 
@@ -24,10 +24,10 @@ Here is a Step-by-Step instruction for an new example named "TESTNAME".
 
 # How to update an example?
 
-Make your changes in [LiveCodes at https://versatiles.org/playground/livecodes](https://versatiles.org/playground/livecodes), click "Export Result (HTML)" and overwrite the example in this repo.
+Make your changes in [LiveCodes at https://versatiles.org/playground/livecodes](https://versatiles.org/playground/livecodes), click `Export Project (JSON)` and overwrite the `examples/$NAME.json` in this repo.
 
 # How does it work?
 
-LiveCodes is a frontend only playground, so it can not load files from the server. But it accepts the [query parameter  `x`](https://livecodes.io/docs/features/import#query-param), containing a url, pointing to a public GitHub repo directory, containing the example files.
+LiveCodes is a frontend only playground. It accepts the GET parameter `?config=`, containing a url of a project JSON.
 
-So the hack is done in the GitHub workflow: Instead of publishing the html files of the examples to github pages, the html files are replaced with redirects, opening LiveCodes with a query parameter, that points to the source code of the examples in the repo.
+So the hack is done in the GitHub workflow: Next to every `.json` in the examples directory the workflow adds a `.html` file containing a simple html redirects to LiveCodes with the `?config=` query parameter, that points to the correct example `.json`.

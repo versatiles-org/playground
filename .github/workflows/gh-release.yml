@@ -36,7 +36,7 @@ jobs:
             if [[ -f "$NAME.json" ]]; then
               mkdir "../docs/examples/$NAME"
               mv "$NAME.json" "../docs/examples/$NAME.json"
-              echo "<html><head><meta http-equiv=\"refresh\" content = \"0;url=https://versatiles.org/playground/livecodes/?x=/playground/examples/$NAME.json\"></head></html>" > "../docs/examples/$NAME/index.html"
+              echo "<html><head><meta http-equiv=\"refresh\" content = \"0;url=https://versatiles.org/playground/livecodes/?config=https://versatiles.org/playground/examples/$NAME.json\"></head></html>" > "../docs/examples/$NAME/index.html"
             fi
           done
       - name: Upload static files as artifact
