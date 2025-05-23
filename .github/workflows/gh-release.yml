@@ -21,19 +21,21 @@ jobs:
         run: |
           mkdir docs
 
+          # add LiveCodes
           curl -Ls "https://github.com/live-codes/livecodes/releases/download/v45/livecodes-v45.tar.gz" | tar -xz
           mv build docs/livecodes
 
+          # add playground page
           mv index.html docs/
 
+          # replace examples with correct redirects to livecodes
           mkdir docs/examples
           cd examples
           for NAME in *; do
-            if [ -f "$NAME" ] -a [[ $NAME == *.html ]]; then
-              echo "<meta http-equiv=\"refresh\" content = \"0;url=https://versatiles.org/playground/livecodes/?x=https%3A%2F%2Fgithub.com%2Fversatiles-org%2Fplayground%2Ftree%2Fmain%2Fexamples%2F${NAME}\">" > "../docs/examples/${NAME}"
+            if [[ -f "$NAME" && $NAME == *.html ]]; then
+              echo "<html><head><meta http-equiv=\"refresh\" content = \"0;url=https://versatiles.org/playground/livecodes/?x=https%3A%2F%2Fgithub.com%2Fversatiles-org%2Fplayground%2Ftree%2Fmain%2Fexamples%2F${NAME}\"></head></html>" > "$NAME"
             fi
           done
-
       - name: Upload static files as artifact
         id: deployment
         uses: actions/upload-pages-artifact@v3
