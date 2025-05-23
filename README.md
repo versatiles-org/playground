@@ -1,33 +1,68 @@
-# VersaTiles Playground
+# VersaTiles Playground
 
-It's a collection of examples on how to use VersaTiles in the frontend
+A playground to show how to use [VersaTiles](https://versatiles.org) in a web frontend.
 
-when pushing, a github workflow loads the free Code playground [LiveCodes](https://github.com/live-codes/livecodes), adds the examples from this repo and deploys everything as Github pages under [versatiles.org/playground/](https://versatiles.org/playground/)
+Every example is built with the free **[LiveCodes](https://github.com/live-codes/livecodes)** editor and automatically deployed to GitHub Pages:
 
-# How to add new examples?
+> **Live demo:** https://versatiles.org/playground/
 
-Here is a Step-by-Step instruction for an new example named "$NAME".
+---
 
-1. Open [LiveCodes at https://versatiles.org/playground/livecodes](https://versatiles.org/playground/livecodes) and write your code. If you need help, check the [documentation of LiveCodes](https://livecodes.io/docs/features/)
+## Repository Structure
 
-2. Export the result using `Menu` > `Project` > `Export` > `Export Project (JSON)` and save the JSON file as `examples/$NAME.json`.
-
-3. Update the top-level `index.html` by adding a new line:
-```html
-<ul>
-	...
-	<li><a href="examples/$NAME">new example showing something</a></li>
-</ul>
+```text
+/
+├── .github/workflows/    # CI pipeline that builds & deploys the playground
+├── examples/             # JSON exports of individual LiveCodes examples
+└── index.html            # Landing page listing all examples
 ```
 
-4. Push/PR the changes, wait till the GitHub workflow is finished and open [versatiles.org/playground/](https://versatiles.org/playground/)
+---
 
-# How to update an example?
+## 🚀 Add a New Example
 
-Make your changes in [LiveCodes at https://versatiles.org/playground/livecodes](https://versatiles.org/playground/livecodes), click `Export Project (JSON)` and overwrite the `examples/$NAME.json` in this repo.
+> Below, replace `<NAME>` with a short kebab‑case identifier for your example.
 
-# How does it work?
+1. **Open LiveCodes** at https://versatiles.org/playground/livecodes and create your example.
+   Need help? Check the [LiveCodes docs](https://livecodes.io/docs/features/).
+2. **Export the project** via `Menu → Project → Export → Export Project (JSON)` and save it as `examples/<NAME>.json` in this repo.
+3. **Link it** in `index.html` by adding a line like:
 
-LiveCodes is a frontend only playground. It accepts the GET parameter `?config=`, containing a url of a project JSON.
+   ```html
+   <ul>
+     …
+     <li><a href="examples/<NAME>">Short description of your example</a></li>
+   </ul>
+   ```
 
-So the hack is done in the GitHub workflow: Next to every `.json` in the examples directory the workflow adds a `.html` file containing a simple html redirects to LiveCodes with the `?config=` query parameter, that points to the correct example `.json`.
+4. **Commit & push** (or open a PR). The GitHub Actions workflow will build and deploy the updated playground.
+   Once the workflow succeeds, your example will be listed at:
+   `https://versatiles.org/playground/`.
+
+---
+
+## 🔄 Update an Existing Example
+
+1. Open an example in LiveCodes.
+2. Make your changes.
+3. Re‑export the project (JSON) and overwrite `examples/<NAME>.json`.
+4. Commit & push. The site will redeploy automatically.
+
+---
+
+## ⚙️ How it works
+
+- **LiveCodes** is a 100 % client‑side playground. It can open a project JSON provided via the `?config=` query parameter.
+- Our **GitHub Actions** workflow builda a new page on every push to `main` and adds:
+
+  1. LiveCodes.
+  2. all `examples/*.json`
+  3. `index.html`.
+
+- Because everything happens in the browser, **no backend** is required.
+
+---
+
+## 📄 License
+
+[MIT](LICENSE)

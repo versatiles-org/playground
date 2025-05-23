@@ -28,17 +28,9 @@ jobs:
           # add playground page
           mv index.html docs/
 
-          # replace examples with correct redirects to livecodes
+          # add examples
           mkdir docs/examples
-          cd examples
-          for FILE in *; do
-            NAME=${FILE%%.*}
-            if [[ -f "$NAME.json" ]]; then
-              mkdir "../docs/examples/$NAME"
-              mv "$NAME.json" "../docs/examples/$NAME.json"
-              echo "<html><head><meta http-equiv=\"refresh\" content = \"0;url=https://versatiles.org/playground/livecodes/?config=https://versatiles.org/playground/examples/$NAME.json\"></head></html>" > "../docs/examples/$NAME/index.html"
-            fi
-          done
+          mv examples/*.json docs/examples/
       - name: Upload static files as artifact
         id: deployment
         uses: actions/upload-pages-artifact@v3
