@@ -1,0 +1,63 @@
+{
+  "title": "Untitled Project",
+  "description": "",
+  "head": "<base href=\"https://cdn.jsdelivr.net/gh/versatiles-org/playground@main/examples/simple-demo/index.html\">\n",
+  "htmlAttrs": "lang=\"en\" class=\"\"",
+  "tags": [],
+  "autoupdate": true,
+  "autosave": false,
+  "autotest": false,
+  "delay": 1500,
+  "formatOnsave": false,
+  "view": "split",
+  "mode": "full",
+  "theme": "dark",
+  "layout": "responsive",
+  "recoverUnsaved": true,
+  "showSpacing": false,
+  "welcome": true,
+  "readonly": false,
+  "allowLangChange": true,
+  "activeEditor": "style",
+  "markup": {
+    "language": "html",
+    "content": "<!doctype html>\n<html>\n\n<head>\n\t<meta charset=\"utf-8\" />\n\t<title>VersaTiles - Demo</title>\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n\t<script src=\"https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js\"></script>\n\t<link href=\"https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css\" rel=\"stylesheet\" />\n</head>\n\n<body>\n\t<div id=\"map\" style=\"width: 100%; height: 80vh\"></div>\n\t<script>\n\t\tnew maplibregl.Map({\n\t\t\tcontainer: \"map\", // The container ID\n\t\t\tstyle: \"https://tiles.versatiles.org/assets/styles/colorful/style.json\", // Style URL\n\t\t});\n\t</script>\n</body>\n\n</html>"
+  },
+  "style": {
+    "language": "css",
+    "content": "body {\n margin: 0px;\n}"
+  },
+  "script": {
+    "language": "javascript",
+    "content": ""
+  },
+  "stylesheets": [],
+  "scripts": [],
+  "cssPreset": "",
+  "imports": {},
+  "types": {},
+  "tests": {
+    "language": "typescript",
+    "content": ""
+  },
+  "tools": {
+    "enabled": "all",
+    "active": "console",
+    "status": "closed"
+  },
+  "zoom": 1,
+  "processors": [],
+  "customSettings": {},
+  "useTabs": false,
+  "tabSize": 2,
+  "lineNumbers": true,
+  "wordWrap": false,
+  "closeBrackets": true,
+  "foldRegions": false,
+  "semicolons": true,
+  "singleQuote": false,
+  "trailingComma": true,
+  "emmet": true,
+  "enableAI": false,
+  "version": "45"
+}

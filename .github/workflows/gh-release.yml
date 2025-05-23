@@ -31,9 +31,12 @@ jobs:
           # replace examples with correct redirects to livecodes
           mkdir docs/examples
           cd examples
-          for NAME in *; do
-            if [[ -f "$NAME" && $NAME == *.html ]]; then
-              echo "<html><head><meta http-equiv=\"refresh\" content = \"0;url=https://versatiles.org/playground/livecodes/?x=https%3A%2F%2Fgithub.com%2Fversatiles-org%2Fplayground%2Ftree%2Fmain%2Fexamples%2F${NAME}\"></head></html>" > "../docs/examples/$NAME"
+          for FILE in *; do
+            NAME=${FILE%%.*}
+            if [[ -f "$NAME.json" ]]; then
+              mkdir "../docs/examples/$NAME"
+              mv "$NAME.json" "../docs/examples/$NAME.json"
+              echo "<html><head><meta http-equiv=\"refresh\" content = \"0;url=https://versatiles.org/playground/livecodes/?x=/playground/examples/$NAME.json"></head></html>" > "../docs/examples/$NAME/index.html"
             fi
           done
       - name: Upload static files as artifact
