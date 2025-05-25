@@ -51,7 +51,7 @@ function getLiveCodesConfig(
 		semicolons: true,
 		showSpacing: false,
 		singleQuote: false,
-		style: { language: 'css', content: '' },
+		style: { language: 'css', content: 'body {\n  margin: 0;\n}' },
 		stylesheets: [],
 		tabSize: 2,
 		tags: [],
