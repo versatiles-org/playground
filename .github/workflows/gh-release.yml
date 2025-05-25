@@ -16,21 +16,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
 
       - name: Build Pages
-        run: |
-          mkdir docs
+        run: deno task generate
 
-          # add LiveCodes
+      - name: Add LiveCodes
+        run: |
           curl -Ls "https://github.com/live-codes/livecodes/releases/download/v45/livecodes-v45.tar.gz" | tar -xz
           mv build docs/livecodes
 
-          # add playground page
-          mv index.html docs/
-
-          # add examples
-          mkdir docs/examples
-          mv examples/*.json docs/examples/
       - name: Upload static files as artifact
         id: deployment
         uses: actions/upload-pages-artifact@v3
