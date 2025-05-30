@@ -3,16 +3,16 @@
   "specifiers": {
     "jsr:@deno/gfm@0.11": "0.11.0",
     "jsr:@denosaurs/emoji@~0.3.1": "0.3.1",
-    "jsr:@std/cli@^1.0.17": "1.0.17",
+    "jsr:@std/cli@^1.0.18": "1.0.19",
     "jsr:@std/collections@^1.1.0": "1.1.0",
     "jsr:@std/encoding@^1.0.10": "1.0.10",
     "jsr:@std/fmt@^1.0.8": "1.0.8",
     "jsr:@std/front-matter@^1.0.9": "1.0.9",
     "jsr:@std/html@^1.0.4": "1.0.4",
-    "jsr:@std/http@^1.0.16": "1.0.16",
+    "jsr:@std/http@^1.0.17": "1.0.17",
     "jsr:@std/media-types@^1.1.0": "1.1.0",
     "jsr:@std/net@^1.0.4": "1.0.4",
-    "jsr:@std/path@^1.0.9": "1.0.9",
+    "jsr:@std/path@^1.1.0": "1.1.0",
     "jsr:@std/streams@^1.0.9": "1.0.9",
     "jsr:@std/toml@^1.0.3": "1.0.6",
     "jsr:@std/yaml@^1.0.5": "1.0.6",
@@ -47,8 +47,8 @@
     "@denosaurs/emoji@0.3.1": {
       "integrity": "b0aed5f55dec99e83da7c9637fe0a36d1d6252b7c99deaaa3fc5dea3fcf3da8b"
     },
-    "@std/cli@1.0.17": {
-      "integrity": "e15b9abe629e17be90cc6216327f03a29eae613365f1353837fa749aad29ce7b"
+    "@std/cli@1.0.19": {
+      "integrity": "b3601a54891f89f3f738023af11960c4e6f7a45dc76cde39a6861124cba79e88"
     },
     "@std/collections@1.1.0": {
       "integrity": "2ee8761c84c3d203f7a4ecd376f9ca88a0c559817a4a54c9150f28c0b948027c"
@@ -69,8 +69,8 @@
     "@std/html@1.0.4": {
       "integrity": "eff3497c08164e6ada49b7f81a28b5108087033823153d065e3f89467dd3d50e"
     },
-    "@std/http@1.0.16": {
-      "integrity": "80c8d08c4bfcf615b89978dcefb84f7e880087cf3b6b901703936f3592a06933",
+    "@std/http@1.0.17": {
+      "integrity": "98aec8ab4080d95c21f731e3008f69c29c5012d12f1b4e553f85935db601569f",
       "dependencies": [
         "jsr:@std/cli",
         "jsr:@std/encoding",
@@ -88,8 +88,8 @@
     "@std/net@1.0.4": {
       "integrity": "2f403b455ebbccf83d8a027d29c5a9e3a2452fea39bb2da7f2c04af09c8bc852"
     },
-    "@std/path@1.0.9": {
-      "integrity": "260a49f11edd3db93dd38350bf9cd1b4d1366afa98e81b86167b4e3dd750129e"
+    "@std/path@1.1.0": {
+      "integrity": "ddc94f8e3c275627281cbc23341df6b8bcc874d70374f75fec2533521e3d6886"
     },
     "@std/streams@1.0.9": {
       "integrity": "a9d26b1988cdd7aa7b1f4b51e1c36c1557f3f252880fa6cc5b9f37078b1a5035"
@@ -237,7 +237,7 @@
     "dependencies": [
       "jsr:@deno/gfm@0.11",
       "jsr:@std/front-matter@^1.0.9",
-      "jsr:@std/http@^1.0.16",
+      "jsr:@std/http@^1.0.17",
       "npm:eta@^3.5.0",
       "npm:livecodes@~0.11.1"
     ]
