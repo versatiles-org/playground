@@ -3,13 +3,15 @@ import { getLiveCodesEmbedOptions } from './lib/livecodes.ts';
 import { Eta } from 'eta';
 import { copyAssets } from './lib/utils.ts';
 import { Example, parseMarkdown } from './lib/markdown.ts';
-import { CSS } from '@deno/gfm';
+import { Page } from 'https://raw.githubusercontent.com/versatiles-org/versatiles-org.github.io/refs/heads/main/src/cms/page.ts';
 
 Deno.chdir((new URL('..', import.meta.url)).pathname);
+
 try {
 	Deno.removeSync('./docs', { recursive: true });
-} catch (error) {}
+} catch (_) { /* */ }
 
+const template = await (await fetch('https://versatiles.org/playground.html')).text();
 const eta = new Eta({ views: (new URL('./templates', import.meta.url)).pathname });
 
 const allExamples: Example[] = [];
@@ -29,13 +31,25 @@ for (const example of allExamples) {
 	copyAssets(`./playground/${slug}`, `./docs/${slug}`);
 
 	const playgroundOptions = getLiveCodesEmbedOptions(example);
-	const editorHTML = eta.render('editor', {
+	const content = eta.render('page', {
 		...example,
 		playgroundOptions,
-		CSS,
 	});
-	Deno.writeTextFileSync(`./docs/${slug}/index.html`, editorHTML);
+	buildPage(content, `${slug}/index.html`);
 }
 
-const overviewHTML = eta.render('overview', { groups });
-Deno.writeTextFileSync('./docs/index.html', overviewHTML);
+const content = eta.render('index', { groups });
+buildPage(content, 'index.html');
+
+function buildPage(content: string, path: string) {
+	const html = new Page(template)
+		.setBaseUrl('https://versatiles.org/playground/')
+		.setContentAttributes({
+			class: 'markdown-body',
+			'data-color-mode': 'dark',
+			'data-light-theme': 'dark',
+			'data-dark-theme': 'dark',
+		})
+		.setContent(content).render();
+	Deno.writeTextFileSync(`./docs/${path}`, html);
+}

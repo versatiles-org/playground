@@ -65,7 +65,7 @@ function getLiveCodesConfig(
 		useTabs: false,
 		version: '45',
 		view: 'split',
-		welcome: true,
+		welcome: false,
 		wordWrap: false,
 		zoom: 1,
 	};

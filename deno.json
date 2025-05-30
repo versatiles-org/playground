@@ -15,6 +15,7 @@
     "@deno/gfm": "jsr:@deno/gfm@^0.11.0",
     "@std/front-matter": "jsr:@std/front-matter@^1.0.9",
     "@std/http": "jsr:@std/http@^1.0.17",
+    "cheerio": "npm:cheerio@^1.0.0",
     "eta": "npm:eta@^3.5.0",
     "livecodes": "npm:livecodes@^0.11.1"
   },

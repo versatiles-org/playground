@@ -1,0 +1,11 @@
+<h1>VersaTiles Playground</h1>
+
+<p>Here are some examples showing how to use VersaTiles in the frontend:</p>
+<% it.groups.forEach(({title,examples}) => { %>
+<h2><%= title %></h2>
+<ul>
+	<% examples.forEach(example => { %>
+	<li><a href="<%~ example.slug %>/"><%= example.title %></a></li>
+	<% }) %>
+</ul>
+<% }) %>

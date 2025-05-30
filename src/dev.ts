@@ -4,7 +4,7 @@ import './generate.ts';
 
 const fsRoot = (new URL('../docs', import.meta.url)).pathname;
 
-Deno.serve((req: Request) => {
+Deno.serve({ port: 8080 }, (req: Request) => {
 	if (req.method !== 'GET') return ignore();
 	if (/\.icp$/.test(req.url)) return ignore();
 

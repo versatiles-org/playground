@@ -1,0 +1,13 @@
+<h1>Playground: <%= it.title %></h1>
+<p><%= it.description %></p>
+<div id="livecodes" data-height="500" style="margin:5em auto; width:min(1200px,100vw);position:relative;left:calc(50% - min(1200px,100vw) / 2)"></div>
+<%~ it.body %>
+
+<script type="module" async>
+	// <!--
+	import {
+		createPlayground
+	} from 'https://versatiles.org/playground/livecodes/sdk/livecodes.js';
+	createPlayground('#livecodes', <%~ JSON.stringify(it.playgroundOptions) %>)
+	// -->
+</script>
