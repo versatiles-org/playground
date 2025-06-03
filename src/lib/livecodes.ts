@@ -5,7 +5,7 @@ function getLiveCodesConfig(
 	example: Example,
 ): Config {
 	const { slug: name, title, description } = example;
-	const filename = `./playground/${name}/index.html`;
+	const filename = `./playground/${name}/code.html`;
 	try {
 		Deno.statSync(filename);
 	} catch (error) {

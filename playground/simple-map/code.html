@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+		<link
+			href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css"
+			rel="stylesheet"
+		/>
+	</head>
+
+	<body>
+		<div id="map" style="height: 100vh"></div>
+		<script>
+			new maplibregl.Map({
+				container: 'map',
+				style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
+				bounds: [-11.417, 35.783, 40.38, 59.062],
+			});
+		</script>
+	</body>
+</html>

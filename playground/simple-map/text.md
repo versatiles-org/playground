@@ -8,7 +8,6 @@ description: How to add a simple map.
 - `/assets/lib/maplibre-gl/maplibre-gl.js` (JavaScript code)
 - `/assets/lib/maplibre-gl/maplibre-gl.css` (style sheet)
 
-
 In our example, we load these assets from our demo server at `https://tiles.versatiles.org`, but you can modify all URLs as needed.
 
 > [!WARNING]

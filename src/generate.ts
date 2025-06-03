@@ -19,7 +19,7 @@ const allExamples: Example[] = [];
 const groups: { title: string; examples: Example[] }[] = toc.map((group) => ({
 	title: group.title,
 	examples: group.examples.map((slug) => {
-		const example = parseMarkdown(slug, `./playground/${slug}/index.md`);
+		const example = parseMarkdown(slug, `./playground/${slug}/text.md`);
 		allExamples.push(example);
 		return example;
 	}),
