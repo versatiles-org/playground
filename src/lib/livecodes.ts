@@ -1,7 +1,7 @@
 import type { Config } from 'livecodes';
 import { Example } from './markdown.ts';
 
-function getLiveCodesConfig(
+export function getLiveCodesConfig(
 	example: Example,
 ): Config {
 	const { slug: name, title, description } = example;
@@ -24,7 +24,7 @@ function getLiveCodesConfig(
 		closeBrackets: true,
 		cssPreset: '',
 		customSettings: {},
-		delay: 1500,
+		delay: 1000,
 		description,
 		editor: undefined,
 		editorMode: undefined,
@@ -68,12 +68,5 @@ function getLiveCodesConfig(
 		welcome: false,
 		wordWrap: false,
 		zoom: 1,
-	};
-}
-
-export function getLiveCodesEmbedOptions(example: Example) {
-	return {
-		appUrl: 'https://versatiles.org/playground/livecodes/',
-		config: getLiveCodesConfig(example),
 	};
 }
