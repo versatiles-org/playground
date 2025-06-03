@@ -44,12 +44,6 @@ buildPage(content, 'index.html');
 function buildPage(content: string, path: string) {
 	const html = new Page(template)
 		.setBaseUrl('https://versatiles.org/playground/')
-		.setContentAttributes({
-			class: 'markdown-body',
-			'data-color-mode': 'dark',
-			'data-light-theme': 'dark',
-			'data-dark-theme': 'dark',
-		})
 		.setContent(content).render();
 	Deno.writeTextFileSync(`./docs/${path}`, html);
 }
