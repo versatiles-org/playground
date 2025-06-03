@@ -35,15 +35,20 @@ for (const example of allExamples) {
 		...example,
 		playgroundOptions,
 	});
-	buildPage(content, `${slug}/index.html`);
+	buildPage(content, slug);
 }
 
 const content = eta.render('index', { groups });
-buildPage(content, 'index.html');
+buildPage(content);
 
-function buildPage(content: string, path: string) {
+function buildPage(content: string, slug?: string) {
 	const html = new Page(template)
 		.setBaseUrl('https://versatiles.org/playground/')
+		.setGithubLink(
+			`https://github.com/versatiles-org/playground/${
+				slug ? `tree/main/playground/${slug}` : ''
+			}`,
+		)
 		.setContent(content).render();
-	Deno.writeTextFileSync(`./docs/${path}`, html);
+	Deno.writeTextFileSync(`./docs/${slug ? `${slug}/` : ''}index.html`, html);
 }
