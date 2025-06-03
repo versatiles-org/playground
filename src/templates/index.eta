@@ -5,7 +5,7 @@
 <h2><%= title %></h2>
 <ul>
 	<% examples.forEach(example => { %>
-	<li><a href="<%~ example.slug %>/"><%= example.title %></a></li>
+	<li><a href="<%~ example.slug %>/"><b><%= example.title %></b> - <%= example.description %></a></li>
 	<% }) %>
 </ul>
 <% }) %>
