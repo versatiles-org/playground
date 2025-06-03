@@ -5,5 +5,5 @@ export type TOC = {
 
 export default [{
 	title: 'Basics',
-	examples: ['simple-map'],
+	examples: ['simple-map', 'simple-style'],
 }] as const satisfies TOC;

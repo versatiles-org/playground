@@ -1,6 +1,6 @@
 ---
 title: Simple Map
-description: How to add a simple map.
+description: How to add a simple OSM map.
 ---
 
 [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) loads and renders map tiles in the browser. To use MapLibre, you need to load the necessary JavaScript and CSS files. Based on our [frontend specification](https://docs.versatiles.org/compendium/specification_frontend.html), the necessary assets should always be available under:
