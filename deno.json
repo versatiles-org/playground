@@ -8,7 +8,7 @@
   "license": "MIT",
   "tasks": {
     "check": "deno check && deno lint && deno fmt",
-    "generate": "deno run --allow-all src/generate.ts",
+    "build": "deno run --allow-all src/build.ts",
     "dev": "deno run --watch='src,playground' --watch-exclude='**/.DS_Store' --allow-all src/dev.ts"
   },
   "imports": {

@@ -1,6 +1,6 @@
 import { serveDir } from '@std/http/file-server';
 
-import './generate.ts';
+import './build.ts';
 
 const fsRoot = (new URL('../docs', import.meta.url)).pathname;
 

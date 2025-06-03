@@ -1,68 +1,54 @@
-# VersaTiles Playground
+# VersaTiles Playground
 
-A playground to show how to use [VersaTiles](https://versatiles.org) in a web frontend.
+A web-based playground demonstrating how to use [VersaTiles](https://versatiles.org) in a frontend environment.
 
-Every example is built with the free **[LiveCodes](https://github.com/live-codes/livecodes)** editor and automatically deployed to GitHub Pages:
+This project uses the free [LiveCodes](https://github.com/live-codes/livecodes) editor and is automatically deployed via GitHub Pages:
+👉 https://versatiles.org/playground/
 
-> **Live demo:** https://versatiles.org/playground/
+⸻
 
----
-
-## Repository Structure
+## 📁 Repository Structure
 
 ```text
-/
-├── .github/workflows/    # CI pipeline that builds & deploys the playground
-├── examples/             # JSON exports of individual LiveCodes examples
-└── index.html            # Landing page listing all examples
+├─ .github/workflows/     # CI pipeline for building & deploying the playground
+├─ docs/                  # Output directory for the generated website
+├─ playground/            # Source examples for the playground
+│  ├─ toc.ts              # Table of contents listing all available examples
+│  └─ $name/              # Individual example directory (replace $name with actual example name)
+│     ├─ code.html        # LiveCodes HTML snippet
+│     └─ text.md          # Markdown explanation for the example
+└─ src/                   # Source code for the generator and dev server
+   ├─ generate.ts         # Script to build all example pages
+   ├─ dev.ts              # Development server
+   ├─ lib/                # Shared utility code
+   └─ templates/          # Embedded JS templates (ETA format)
+      ├─ index.eta        # Template for the index page
+      └─ page.eta         # Template for individual example pages
 ```
 
----
+⸻
 
-## 🚀 Add a New Example
+## 🚀 Usage
 
-> Below, replace `<NAME>` with a short kebab‑case identifier for your example.
+### Build the Playground
 
-1. **Open LiveCodes** at https://versatiles.org/playground/livecodes and create your example.
-   Need help? Check the [LiveCodes docs](https://livecodes.io/docs/features/).
-2. **Export the project** via `Menu → Project → Export → Export Project (JSON)` and save it as `examples/<NAME>.json` in this repo.
-3. **Link it** in `index.html` by adding a line like:
+To generate all web pages from the examples:
 
-   ```html
-   <ul>
-     …
-     <li><a href="examples/<NAME>">Short description of your example</a></li>
-   </ul>
-   ```
+```bash
+deno task build
+```
 
-4. **Commit & push** (or open a PR). The GitHub Actions workflow will build and deploy the updated playground.
-   Once the workflow succeeds, your example will be listed at:
-   `https://versatiles.org/playground/`.
+### Run in Development Mode
 
----
+To start a local development server:
 
-## 🔄 Update an Existing Example
+```bash
+deno task dev
+```
 
-1. Open an example in LiveCodes.
-2. Make your changes.
-3. Re‑export the project (JSON) and overwrite `examples/<NAME>.json`.
-4. Commit & push. The site will redeploy automatically.
 
----
+⸻
 
-## ⚙️ How it works
+## 📄 License
 
-- **LiveCodes** is a 100 % client‑side playground. It can open a project JSON provided via the `?config=` query parameter.
-- Our **GitHub Actions** workflow builda a new page on every push to `main` and adds:
-
-  1. LiveCodes.
-  2. all `examples/*.json`
-  3. `index.html`.
-
-- Because everything happens in the browser, **no backend** is required.
-
----
-
-## 📄 License
-
-[MIT](LICENSE)
+This project is licensed under the [MIT License](./LICENSE).
