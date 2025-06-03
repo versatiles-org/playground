@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
-		<link
-			href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css"
-			rel="stylesheet"
-		/>
-	</head>
 
-	<body>
-		<div id="map" style="height: 100vh"></div>
-		<script>
-			new maplibregl.Map({
-				container: 'map', // id of the container to render the map in
-				style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
-				bounds: [-11.417, 35.783, 40.38, 59.062], // set the initial map bounds
-			});
-		</script>
-	</body>
+<head>
+	<!-- Load MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height: 100vh"></div>
+
+	<!-- Initialize the map -->
+	<script>
+		new maplibregl.Map({
+			container: 'map', // id of the container to render the map in
+			style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
+			bounds: [-12, 35, 41, 60], // set the initial map bounds
+		});
+	</script>
+</body>
+
 </html>

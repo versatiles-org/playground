@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<script src="https://tiles.versatiles.org/assets/lib/versatiles-style/versatiles-style.js"></script>
-		<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
-		<link
-			href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css"
-			rel="stylesheet"
-		/>
-	</head>
 
-	<body>
-		<div id="map" style="height: 100vh"></div>
-		<script>
-			const style = VersaTilesStyle.colorful({
-				baseUrl: 'https://tiles.versatiles.org', // base URL for tiles, sprites, and fonts
-				language: 'de', // language for labels
-				colors: {
-					label: '#000', // render all labels in black
-				},
-				recolor: {
-					saturate: -1, // make all map colors grayscale
-				},
-			});
-			new maplibregl.Map({
-				container: 'map',
-				style,
-				bounds: [-11.417, 35.783, 40.38, 59.062],
-			});
-		</script>
-	</body>
+<head>
+	<!-- Load VersaTiles Style and MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/versatiles-style/versatiles-style.js"></script>
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height: 100vh"></div>
+
+	<!-- Initialize the map -->
+	<script>
+		const style = VersaTilesStyle.colorful({
+			baseUrl: 'https://tiles.versatiles.org', // base URL for tiles, sprites and fonts
+			language: 'de', // use german labels
+			colors: {
+				label: '#000', // render all labels in black
+			},
+			recolor: {
+				saturate: -0.8, // reduce saturation of all map colors
+			},
+		});
+		
+		new maplibregl.Map({
+			container: 'map',
+			style,
+			bounds: [-12, 35, 41, 60],
+		});
+	</script>
+</body>
+
 </html>

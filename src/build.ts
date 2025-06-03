@@ -26,6 +26,16 @@ export default async function build(preview = false) {
 		}),
 	}));
 
+	const style = [
+		'margin:5em auto',
+		'width:min(1200px,100vw)',
+		'height:500px',
+		'position:relative',
+		'left:calc(50% - min(1200px,100vw) / 2)',
+		'border:none',
+		'border-radius:8px',
+	].join(';');
+
 	for (const example of allExamples) {
 		const { slug } = example;
 		Deno.mkdirSync(`./docs/${slug}`, { recursive: true });
@@ -33,7 +43,7 @@ export default async function build(preview = false) {
 
 		const config = getLiveCodesConfig(example);
 		Deno.writeTextFileSync(`./docs/${slug}/config.json`, JSON.stringify(config));
-		const content = eta.render('page', { ...example, config, preview });
+		const content = eta.render('page', { ...example, config, preview, style });
 		buildPage(content, slug);
 	}
 
@@ -41,13 +51,11 @@ export default async function build(preview = false) {
 	buildPage(content);
 
 	function buildPage(content: string, slug?: string) {
+		const githubUrl = slug ? `tree/main/playground/${slug}` : '';
+
 		const html = new Page(template)
 			.setBaseUrl('https://versatiles.org/playground/')
-			.setGithubLink(
-				`https://github.com/versatiles-org/playground/${
-					slug ? `tree/main/playground/${slug}` : ''
-				}`,
-			)
+			.setGithubLink(`https://github.com/versatiles-org/playground/${githubUrl}`)
 			.setContent(content).render();
 		Deno.writeTextFileSync(`./docs/${slug ? `${slug}/` : ''}index.html`, html);
 	}

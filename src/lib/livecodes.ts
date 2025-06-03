@@ -42,7 +42,7 @@ export function getLiveCodesConfig(
 		layout: 'responsive',
 		lineNumbers: true,
 		markup: { language: 'html', content },
-		mode: 'full',
+		mode: 'simple',
 		processors: [],
 		readonly: false,
 		recoverUnsaved: true,
