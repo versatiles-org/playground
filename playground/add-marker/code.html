@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Load MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height:100vh"></div>
+
+	<!-- Initialize the map -->
+	<script>
+		const coordinates = [12.3393987, 45.4333365];
+
+		const map = new maplibregl.Map({
+			container: 'map',
+			style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
+			center: coordinates,
+			zoom: 16,
+		});
+
+		let marker = new maplibregl.Marker({ color: '#c00' })
+			.setLngLat(coordinates)
+			.addTo(map);
+	</script>
+</body>
+
+</html>

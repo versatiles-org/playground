@@ -4,5 +4,6 @@ export type TOC = {
 }[];
 
 export default [
-	{ title: 'Basics', examples: ['basic-map', 'basic-style'] }
+	{ title: 'Basics', examples: ['basic-map', 'basic-style'] },
+	{ title: 'Adding Features', examples: ['add-marker'] }
 ] as const satisfies TOC;
