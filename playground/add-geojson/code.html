@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
@@ -9,31 +9,47 @@
 
 <body>
 	<!-- Define the map container -->
-	<div id="map" style="height:100vh"></div>
+	<div id="map" style="height: 100vh"></div>
 
 	<!-- Initialize the map -->
 	<script>
 		const map = new maplibregl.Map({
-			container: 'map',
-			style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
-			bounds: [4.8, 47.3, 5.1, 47.5],
+			container: "map",
+			style: "https://tiles.versatiles.org/assets/styles/colorful/style.json",
+			bounds: [4.8, 47.3, 5.1, 47.55],
 		});
 
-		const data = await(await fetch('/playground/add-geojson/val_suzon.geojson')).json();
-		map.addSource('val_suzon', {
-			type: 'geojson',
-			data
-		});
-		map.addLayer({
-			id: 'val_suzon',
-			type: 'fill',
-			source: 'val_suzon',
-			layout: {},
-			paint: {
-				'fill-color': '#0a0',
-				'fill-opacity': 0.5
-			}
-		});
+		fetch("https://versatiles.org/playground/add-geojson/val_suzon.geojson")
+			.then((req) => req.json())
+			.then((geojson) => {
+				map.addSource("mydata", {
+					type: "geojson",
+					data: geojson,
+				});
+				map.addLayer({
+					id: "mydata_fill",
+					type: "fill",
+					source: "mydata",
+					paint: {
+						"fill-color": "#c00",
+						"fill-opacity": 0.2,
+					},
+				});
+				map.addLayer({
+					id: "mydata_line",
+					type: "line",
+					source: "mydata",
+					layout: {
+						"line-cap": "round",
+						"line-join": "round",
+					},
+					paint: {
+						"line-color": "#c00",
+						"line-dasharray": [1, 2],
+						"line-width": 2,
+					},
+				});
+			});
 	</script>
 </body>
 
