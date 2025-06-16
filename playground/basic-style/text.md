@@ -1,5 +1,5 @@
 ---
-title: Simple Style
+title: Basic Style
 description: How to style a simple OSM map.
 ---
 

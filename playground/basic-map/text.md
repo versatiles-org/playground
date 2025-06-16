@@ -1,5 +1,5 @@
 ---
-title: Simple Map
+title: Basic OSM Map
 description: How to add a simple OSM map.
 ---
 
