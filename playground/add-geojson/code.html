@@ -19,7 +19,7 @@
 			bounds: [4.8, 47.3, 5.1, 47.55],
 		});
 
-		fetch("https://versatiles.org/playground/add-geojson/val_suzon.geojson")
+		fetch("https://versatiles.org/playground/add-geojson/data.geojson")
 			.then((req) => req.json())
 			.then((geojson) => {
 				map.addSource("mydata", {
