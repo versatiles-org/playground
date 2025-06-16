@@ -19,13 +19,18 @@
 			bounds: [4.8, 47.3, 5.1, 47.55],
 		});
 
+		// Fetch GeoJSON data
 		fetch("https://versatiles.org/playground/add-geojson/data.geojson")
 			.then((req) => req.json())
 			.then((geojson) => {
+
+				// Add the GeoJSON data as a source
 				map.addSource("mydata", {
 					type: "geojson",
 					data: geojson,
 				});
+
+				// Add fill layer
 				map.addLayer({
 					id: "mydata_fill",
 					type: "fill",
@@ -35,6 +40,8 @@
 						"fill-opacity": 0.2,
 					},
 				});
+
+				// Add outline layer
 				map.addLayer({
 					id: "mydata_line",
 					type: "line",
