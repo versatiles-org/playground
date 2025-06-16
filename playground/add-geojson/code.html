@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Load MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height:100vh"></div>
+
+	<!-- Initialize the map -->
+	<script>
+		const map = new maplibregl.Map({
+			container: 'map',
+			style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
+			bounds: [4.8, 47.3, 5.1, 47.5],
+		});
+
+		const data = await(await fetch('/playground/add-geojson/val_suzon.geojson')).json();
+		map.addSource('val_suzon', {
+			type: 'geojson',
+			data
+		});
+		map.addLayer({
+			id: 'val_suzon',
+			type: 'fill',
+			source: 'val_suzon',
+			layout: {},
+			paint: {
+				'fill-color': '#0a0',
+				'fill-opacity': 0.5
+			}
+		});
+	</script>
+</body>
+
+</html>
