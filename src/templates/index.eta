@@ -1,11 +1,21 @@
 <h1>VersaTiles Playground</h1>
 
 <p>Here are some examples showing how to use VersaTiles in the frontend:</p>
+
 <% it.groups.forEach(({title,examples}) => { %>
 <h2><%= title %></h2>
-<ul>
-	<% examples.forEach(example => { %>
-	<li><a href="<%~ example.slug %>/"><b><%= example.title %></b> - <%= example.description %></a></li>
-	<% }) %>
-</ul>
+
+<% examples.forEach(example => { %>
+<div style="display:flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin:3em 0">
+	<div style="min-width: 300px; flex-grow: 1;">
+		<h3 style="margin:0; text-align: center"><a href="<%~ example.slug %>/" style="text-decoration:none"><%= example.title %></a></h3>
+		<p  style="margin:0; text-align: center"><a href="<%~ example.slug %>/" style="text-decoration:none"><%= example.description %></a></p>
+	</div>
+	<div style="flex-shrink: 0; flex-grow: 0;">
+		<a href="<%~ example.slug %>/" style="text-decoration:none">
+			<img src="<%~ example.slug %>/preview.png" alt="<%= example.title %>" style="width:300px" />
+		</a>
+	</div>
+</div>
+<% }) %>
 <% }) %>
