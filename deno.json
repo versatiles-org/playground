@@ -9,7 +9,8 @@
   "tasks": {
     "check": "deno check && deno lint && deno fmt",
     "build": "deno run --allow-all src/build.ts",
-    "dev": "deno run --watch='src,playground' --watch-exclude='**/.DS_Store' --allow-all src/dev.ts"
+    "dev": "deno run --watch='src,playground' --watch-exclude='**/.DS_Store' --allow-all src/dev.ts",
+    "screenshots": "deno run --allow-all src/screenshots.ts"
   },
   "imports": {
     "@deno/gfm": "jsr:@deno/gfm@^0.11.0",
@@ -17,8 +18,10 @@
     "@std/http": "jsr:@std/http@^1.0.17",
     "cheerio": "npm:cheerio@^1.0.0",
     "eta": "npm:eta@^3.5.0",
-    "livecodes": "npm:livecodes@^0.11.1"
+    "livecodes": "npm:livecodes@^0.11.1",
+    "puppeteer": "npm:puppeteer@^24.10.1"
   },
+  "nodeModulesDir": "auto",
   "fmt": {
     "useTabs": true,
     "lineWidth": 100,

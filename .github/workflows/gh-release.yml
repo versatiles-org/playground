@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
@@ -22,6 +22,9 @@ jobs:
         with:
           deno-version: v2.x
           cache: true
+
+      - name: Build Pages
+        run: deno task screenshots
 
       - name: Build Pages
         run: deno task build

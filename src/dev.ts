@@ -6,7 +6,7 @@ build(true);
 
 const fsRoot = (new URL('../docs', import.meta.url)).pathname;
 
-Deno.serve({ port: 8080 }, (req: Request) => {
+const server = Deno.serve({ port: 8080 }, (req: Request) => {
 	if (req.method !== 'GET') return ignore();
 	if (/\.icp$/.test(req.url)) return ignore();
 
@@ -16,3 +16,5 @@ Deno.serve({ port: 8080 }, (req: Request) => {
 		return new Response('ignore', { status: 404 });
 	}
 });
+
+export default server;
