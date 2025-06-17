@@ -4,6 +4,18 @@ export type TOC = {
 }[];
 
 export default [
-	{ title: 'Basics', examples: ['basic-map', 'basic-style'] },
-	{ title: 'Adding Features', examples: ['add-marker', 'add-geojson'] }
+	{
+		title: 'Basics',
+		examples: [
+			'basic-map',
+			'basic-style'
+		]
+	},
+	{
+		title: 'Adding Features',
+		examples: [
+			'add-marker',
+			'add-geojson'
+		]
+	}
 ] as const satisfies TOC;
