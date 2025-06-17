@@ -16,7 +16,7 @@ for (const entry of toc) {
 		const iframe = await page.$('#livecodes');
 		if (!iframe) throw new Error(`No iframe found for ${example}`);
 		iframe.scrollIntoView();
-		await new Promise((r) => setTimeout(r, 5000));
+		await new Promise((r) => setTimeout(r, 8000));
 
 		const clip = await iframe.boundingBox();
 		if (!clip) throw new Error(`No bounding box found for ${example}`);
