@@ -3,7 +3,7 @@ import { getLiveCodesConfig } from './lib/livecodes.ts';
 import { Eta } from 'eta';
 import { copyAssets } from './lib/utils.ts';
 import { Example, parseMarkdown } from './lib/markdown.ts';
-import { Page } from 'https://raw.githubusercontent.com/versatiles-org/versatiles-org.github.io/refs/heads/main/src/cms/page.ts';
+import { Page } from 'npm:cheerio_cms';
 
 export default async function build(preview = false) {
 	Deno.chdir((new URL('..', import.meta.url)).pathname);
@@ -44,20 +44,26 @@ export default async function build(preview = false) {
 		const config = getLiveCodesConfig(example);
 		Deno.writeTextFileSync(`./docs/${slug}/config.json`, JSON.stringify(config));
 		const content = eta.render('page', { ...example, config, preview, style });
-		buildPage(content, slug);
+		buildPage(content, example);
 	}
 
 	const content = eta.render('index', { groups });
 	buildPage(content);
 
-	function buildPage(content: string, slug?: string) {
-		const githubUrl = slug ? `tree/main/playground/${slug}` : '';
+	function buildPage(content: string, example?: Example) {
+		const githubUrl = example ? `tree/main/playground/${example.slug}` : '';
 
-		const html = new Page(template)
+		const page = new Page(template)
 			.setBaseUrl('https://versatiles.org/playground/')
 			.setGithubLink(`https://github.com/versatiles-org/playground/${githubUrl}`)
-			.setContent(content).render();
-		Deno.writeTextFileSync(`./docs/${slug ? `${slug}/` : ''}index.html`, html);
+			.setContent(content);
+		if (example) {
+			page.setTitle(`Versatiles Playground - ${example.title}`, example.description)
+				.setSocialImage(`https://versatiles.org/playground/${example.slug}/preview.png`);
+		}
+
+		const html = page.render();
+		Deno.writeTextFileSync(`./docs/${example ? `${example.slug}/` : ''}index.html`, html);
 	}
 }
 
