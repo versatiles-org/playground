@@ -17,5 +17,11 @@ export default [
 			'add-marker',
 			'add-geojson'
 		]
+	},
+	{
+		title: 'Adding UI Controls',
+		examples: [
+			'geocoder'
+		]
 	}
 ] as const satisfies TOC;

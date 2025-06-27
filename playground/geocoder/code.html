@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+	<!-- Load MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+	<!-- Load MapLibre GL Geocoder plugin -->
+	<script src="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.9.0/dist/maplibre-gl-geocoder.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.9.0/dist/maplibre-gl-geocoder.css" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height:100vh"></div>
+
+	<!-- Initialize the map -->
+	<script>
+		// add the MapLibre GL RTL text plugin for proper rendering of right-to-left languages
+		maplibregl.setRTLTextPlugin('./assets/lib/mapbox-gl-rtl-text/mapbox-gl-rtl-text.js', true);
+
+		// start the map with a standard VersaTiles style
+		const map = new maplibregl.Map({
+			container: 'map', // id of the container to render the map in
+			style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
+			bounds: [-4, 41, 25, 57], // set the initial map bounds
+		});
+
+		// add address search control powered by Photon
+		const geocoder = new MaplibreGeocoder({
+			forwardGeocode: async (config) => {
+				const url = `https://geocode.versatiles.org/api?q=${encodeURIComponent(config.query)}&limit=5`;
+				const geojson = await (await fetch(url)).json();
+
+				geojson.features.forEach((f) => {
+					const { name, city, country } = f.properties;
+					f.place_name = [name, city, country].filter(Boolean).join(', ');
+					f.place_type = ['place'];
+					f.center = f.geometry.coordinates;
+				});
+
+				return geojson;
+			},
+		}, { maplibregl, marker: false });
+
+		map.addControl(geocoder, 'top-left');
+	</script>
+</body>
+
+</html>
