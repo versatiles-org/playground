@@ -17,6 +17,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Build LiveCodes
+        run: ./scripts/build_livecodes.sh
+
       - name: Set up Deno
         uses: denoland/setup-deno@v2
         with:
@@ -31,11 +40,6 @@ jobs:
 
       - name: Build Pages
         run: deno task build
-
-      - name: Add LiveCodes
-        run: |
-          curl -Ls "https://github.com/live-codes/livecodes/releases/download/v45/livecodes-v45.tar.gz" | tar -xz
-          mv build docs/livecodes
 
       - name: Upload static files as artifact
         id: deployment
