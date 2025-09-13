@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: deno install --allow-scripts=npm:puppeteer
 
+      - name: Check
+        run: deno task check
+
       - name: Build Screenshots
         run: deno task screenshots
 
