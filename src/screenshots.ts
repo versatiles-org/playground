@@ -1,6 +1,6 @@
 import toc from '../playground/toc.ts';
 import server from './dev.ts';
-import puppeteer from 'npm:puppeteer';
+import puppeteer from 'puppeteer';
 
 const browser = await puppeteer.launch({
 	headless: true,

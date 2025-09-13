@@ -3,7 +3,7 @@ import { getLiveCodesConfig } from './lib/livecodes.ts';
 import { Eta } from 'eta';
 import { copyAssets } from './lib/utils.ts';
 import { Example, parseMarkdown } from './lib/markdown.ts';
-import { Page } from 'npm:cheerio_cms';
+import { Page } from 'cheerio_cms';
 
 export default async function build(preview = false) {
 	Deno.chdir((new URL('..', import.meta.url)).pathname);
