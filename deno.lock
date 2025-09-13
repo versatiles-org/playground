@@ -18,8 +18,7 @@
     "jsr:@std/streams@^1.0.10": "1.0.11",
     "jsr:@std/toml@^1.0.3": "1.0.8",
     "jsr:@std/yaml@^1.0.5": "1.0.8",
-    "npm:cheerio_cms@*": "1.0.0",
-    "npm:cheerio_cms@1": "1.0.0",
+    "npm:cheerio_cms@^1.0.1": "1.0.1",
     "npm:eta@^3.5.0": "3.5.0",
     "npm:github-slugger@2": "2.0.0",
     "npm:he@^1.2.0": "1.2.0",
@@ -30,7 +29,6 @@
     "npm:marked-gfm-heading-id@^3.1.0": "3.2.0_marked@12.0.2",
     "npm:marked@12": "12.0.2",
     "npm:prismjs@^1.29.0": "1.30.0",
-    "npm:puppeteer@*": "24.20.0_devtools-protocol@0.0.1495869",
     "npm:puppeteer@^24.20.0": "24.20.0_devtools-protocol@0.0.1495869",
     "npm:sanitize-html@^2.13.0": "2.17.0"
   },
@@ -261,8 +259,8 @@
         "whatwg-mimetype"
       ]
     },
-    "cheerio_cms@1.0.0": {
-      "integrity": "sha512-rP/r4armpfvbsHgy+alNMCJl8j4+lva6uInyDIoxZehqByUXyfQGf5tzhIKlXjin9KR+F1mGJJVcn/oAaq8WGA==",
+    "cheerio_cms@1.0.1": {
+      "integrity": "sha512-QHZlNXkmPpHMQzvmZYzryJ8XIjqv/btcT52PxHOzAekKzDu8NaHk+lZ4LyMdScLKWSWfbjQ6o5br8dF7C8N+bw==",
       "dependencies": [
         "cheerio"
       ]
@@ -903,7 +901,7 @@
       "jsr:@deno/gfm@0.11",
       "jsr:@std/front-matter@^1.0.9",
       "jsr:@std/http@^1.0.20",
-      "npm:cheerio_cms@1",
+      "npm:cheerio_cms@^1.0.1",
       "npm:eta@^3.5.0",
       "npm:livecodes@~0.11.1",
       "npm:puppeteer@^24.20.0"
