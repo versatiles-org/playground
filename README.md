@@ -54,7 +54,8 @@ deno task dev
 
 To add a new example to the playground:
 
-1. **Create a Folder:**  
+1. **Create a Folder:**
+
    Add a new directory inside `playground/` (use a descriptive name for your example).
 
 2. **Add Example Files:**
@@ -62,7 +63,8 @@ To add a new example to the playground:
    - Copy or create a `code.html` file with your LiveCodes snippet.
    - Copy or create a `text.md` file with a markdown explanation of your example.
 
-3. **Register the Example:**  
+3. **Register the Example:**
+
    Update the `examples` array in `playground/toc.ts` to include your new example.
 
 4. **Preview Locally:**
@@ -70,7 +72,8 @@ To add a new example to the playground:
    - Start the development server with `deno task dev`.
    - Open [http://localhost:8080](http://localhost:8080) in your browser.
 
-5. **Iterate:**  
+5. **Iterate:**
+
    Improve your `code.html` and `text.md` files to refine your example and documentation.
 
 Screenshots are automatically generated during [deployment](https://github.com/versatiles-org/playground/blob/main/.github/workflows/gh-release.yml). You can test the screenshots with `deno task screenshots`.

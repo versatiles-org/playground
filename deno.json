@@ -1,42 +1,42 @@
 {
-  "description": "A playground to show how to use [VersaTiles](https://versatiles.org) in a web frontend.",
-  "homepage": "https://github.com/versatiles-org/playground#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/versatiles-org/playground.git"
-  },
-  "license": "MIT",
-  "tasks": {
-    "check": "deno check && deno lint && deno fmt",
-    "build": "deno run --allow-all src/build.ts",
-    "dev": "deno run --watch='src,playground' --watch-exclude='**/.DS_Store' --allow-all src/dev.ts",
-    "screenshots": "deno run --allow-all src/screenshots.ts",
-    "upgrade": "deno outdated --update --latest"
-  },
-  "imports": {
-    "@deno/gfm": "jsr:@deno/gfm@^0.11.0",
-    "@std/front-matter": "jsr:@std/front-matter@^1.0.9",
-    "@std/http": "jsr:@std/http@^1.0.17",
-    "cheerio_cms": "npm:cheerio_cms@^1.0.0",
-    "eta": "npm:eta@^3.5.0",
-    "livecodes": "npm:livecodes@^0.11.1",
-    "puppeteer": "npm:puppeteer@^24.10.1"
-  },
-  "nodeModulesDir": "auto",
-  "fmt": {
-    "useTabs": true,
-    "lineWidth": 100,
-    "indentWidth": 3,
-    "semiColons": true,
-    "singleQuote": true,
-    "proseWrap": "preserve",
-    "include": [
-      "playground/",
-      "src/"
-    ],
-    "exclude": [
-      "docs/",
-      "playground/"
-    ]
-  }
+	"description": "A playground to show how to use [VersaTiles](https://versatiles.org) in a web frontend.",
+	"homepage": "https://github.com/versatiles-org/playground#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/versatiles-org/playground.git"
+	},
+	"license": "MIT",
+	"tasks": {
+		"check": "deno check && deno lint && deno fmt",
+		"build": "deno run --allow-all src/build.ts",
+		"dev": "deno run --watch='src,playground' --watch-exclude='**/.DS_Store' --allow-all src/dev.ts",
+		"screenshots": "deno run --allow-all src/screenshots.ts",
+		"upgrade": "deno outdated --update --latest"
+	},
+	"imports": {
+		"@deno/gfm": "jsr:@deno/gfm@^0.11.0",
+		"@std/front-matter": "jsr:@std/front-matter@^1.0.9",
+		"@std/http": "jsr:@std/http@^1.0.17",
+		"cheerio_cms": "npm:cheerio_cms@^1.0.0",
+		"eta": "npm:eta@^3.5.0",
+		"livecodes": "npm:livecodes@^0.11.1",
+		"puppeteer": "npm:puppeteer@^24.10.1"
+	},
+	"nodeModulesDir": "auto",
+	"fmt": {
+		"useTabs": true,
+		"lineWidth": 100,
+		"indentWidth": 3,
+		"semiColons": true,
+		"singleQuote": true,
+		"proseWrap": "preserve"
+	},
+	"include": [
+		"src/"
+	],
+	"exclude": [
+		".github/",
+		"docs/",
+		"playground/"
+	]
 }
