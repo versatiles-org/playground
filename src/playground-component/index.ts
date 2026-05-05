@@ -4,7 +4,10 @@ import Prism from 'prismjs';
 import { CodeJar } from 'codejar';
 
 const styleEl = document.createElement('style');
-styleEl.textContent = `${prismCss}\n${vpCss}`;
+// Strip Prism's `font-size: 1em` so docs-body code blocks inherit naturally
+// from the page; syntax-highlighting colors are left intact.
+const prismScrubbed = prismCss.replace(/\s*font-size:\s*1em;/g, '');
+styleEl.textContent = `${prismScrubbed}\n${vpCss}`;
 document.head.appendChild(styleEl);
 
 async function mount(root: HTMLElement) {
