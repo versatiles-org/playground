@@ -15,6 +15,11 @@ const server = http.createServer((req, res) => {
 	if (req.method !== 'GET') return ignore(res);
 	if (/\.icp$/.test(req.url ?? '')) return ignore(res);
 
+	// serve-handler with cleanUrls:false skips index.html resolution for directory
+	// requests, so do it manually to match GitHub Pages behavior.
+	const url = req.url ?? '/';
+	if (url.endsWith('/')) req.url = url + 'index.html';
+
 	return handler(req, res, { public: fsRoot, cleanUrls: false });
 });
 
