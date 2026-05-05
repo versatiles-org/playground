@@ -8,14 +8,8 @@
 
 	display: flex;
 	flex-direction: column;
+	gap: 1rem;
 	margin: 5em auto;
-	max-width: 1200px;
-	width: 100%;
-	background: var(--vp-panel);
-	border: 1px solid var(--vp-border);
-	border-radius: 10px;
-	overflow: hidden;
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 	color: var(--vp-text);
 	font-family: system-ui, -apple-system, sans-serif;
 	box-sizing: border-box;
@@ -30,6 +24,17 @@
 .vp-playground .vp-pane {
 	display: flex;
 	flex-direction: column;
+	background: var(--vp-panel);
+	border: 1px solid var(--vp-border);
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.vp-playground .vp-pane-code {
+	position: relative;
+	width: min(1200px, 100vw);
+	left: calc(50% - min(1200px, 100vw) / 2);
 }
 
 .vp-playground .vp-label {
@@ -40,10 +45,6 @@
 	color: var(--vp-muted);
 	background: #1a1a28;
 	border-bottom: 1px solid var(--vp-border);
-}
-
-.vp-playground .vp-pane-code {
-	border-top: 1px solid var(--vp-border);
 }
 
 .vp-playground .vp-preview-wrap {
