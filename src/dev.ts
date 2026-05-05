@@ -10,7 +10,6 @@ const fsRoot = path.resolve(import.meta.dirname, '../docs');
 
 const server = http.createServer((req, res) => {
 	if (req.method !== 'GET') return ignore(res);
-	if (/\.icp$/.test(req.url ?? '')) return ignore(res);
 
 	// serve-handler with cleanUrls:false skips index.html resolution for directory
 	// requests, so do it manually to match GitHub Pages behavior.
@@ -23,14 +22,16 @@ const server = http.createServer((req, res) => {
 	return handler(req, res, { public: fsRoot, cleanUrls: false });
 });
 
-const url = 'http://localhost:8080';
-server.listen(8080, () => {
+const port = Number(process.env.PORT) || 8080;
+export const url = `http://localhost:${port}`;
+
+server.listen(port, () => {
 	console.log(`Listening on ${url}`);
 });
 
 function ignore(res: http.ServerResponse) {
 	res.statusCode = 404;
-	res.end('ignore');
+	res.end();
 }
 
 export default server;
