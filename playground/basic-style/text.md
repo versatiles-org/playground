@@ -3,15 +3,15 @@ title: Basic Style
 description: How to style a simple OSM map.
 ---
 
-[MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) use special `style` objects that define the appearance of your map. These `style` object are quite complex JavaScript objects that define data sources, layers, colors, fonts, symbols, etc. (If you later want to really fine tune your map you can find the complete specification here: [MapLibre Style Spec](https://maplibre.org/maplibre-style-spec/))
+[MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) uses `style` objects to define the appearance of a map. These objects describe data sources, layers, colors, fonts, symbols, etc. (If you want to fine-tune a map down to individual layers, see the complete [MapLibre Style Spec](https://maplibre.org/maplibre-style-spec/).)
 
-To make it easier to work with these map styles, we've developed the [JavaScript library "versatiles-style"](https://github.com/versatiles-org/versatiles-style) to generate styles very fast and efficient in the frontend or the backend.
+To make it easier to work with map styles, we've developed the [JavaScript library "versatiles-style"](https://github.com/versatiles-org/versatiles-style) to generate styles efficiently in the frontend or the backend.
 
-Based on our [frontend specification](https://docs.versatiles.org/compendium/specification_frontend.html), the library should be ready to use under:
+We host versatiles-style at a predictable path on `tiles.versatiles.org` (see our [frontend specification](https://docs.versatiles.org/compendium/specification_frontend.html)):
 
 - `/assets/lib/versatiles-style/versatiles-style.js`
 
-Loading our library adds the global variable `VersaTilesStyle` to the JavaScript environment. To generate a style ready to use simply run:
+Loading the library adds the global `VersaTilesStyle` to the JavaScript environment. To generate a style:
 
 ```javascript
 const style = VersaTilesStyle.colorful(); // <- generates a style
@@ -22,26 +22,24 @@ new maplibregl.Map({
 })
 ```
 
-We also provide other functions to generate base styles, like `colorful`, `eclipse`, `graybeard` and `neutrino`.
+In this example we additionally use German labels (`language: 'de'`), render labels in black (`colors.label`), and reduce the overall saturation (`recolor.saturate`).
 
-All these style functions accept optional properties to fine tune the styles, like:
+We provide several base styles for different use cases:
 
-```javascript
-{
-   baseUrl: string; // host of your map server, like "https://example.org"
-   bounds: [number, number, number, number]; // bounding box of the initial view
-   colors: Partial<StyleBuilderColors>; // to change individual colors
-   fonts: Partial<StyleBuilderFonts>; // to change the default fonts
-   glyphs: string; // to change the url template of the fonts
-   hideLabels: boolean; // to hide all labels on the map
-   language: Language; // to switch the default language of all labels
-   recolor: RecolorOptions; // to change all colors in the map
-   sprite: SpriteSpecification; // to load different symbols
-   tiles: string[]; // to change the tile source
-}
-```
+- `colorful` — the default, rich colors
+- `eclipse` — dark mode
+- `graybeard` — grayscale
+- `neutrino` — minimal, low-contrast
 
-For example, the following code will generate a map style without labels and tint it green, making it look like the 'Matrix', which will make people from the '90s think your map looks cool.
+Each takes the same options. See the [API documentation](https://versatiles.org/versatiles-style/index.html), in particular:
+
+- [StyleBuilderOptions](https://versatiles.org/versatiles-style/interfaces/StyleBuilderOptions.html) — all options the style functions accept.
+- [RecolorOptions](https://versatiles.org/versatiles-style/interfaces/RecolorOptions.html) — change brightness, contrast, saturation, gamma, etc.
+- [StyleBuilderColors](https://versatiles.org/versatiles-style/interfaces/StyleBuilderColors.html) — change individual colors.
+
+### Going further: the "Matrix" effect
+
+Combining `hideLabels` and `recolor` produces stylized variants. The following gives you a green-tinted, label-free map that 90s movie fans will recognize:
 
 ```javascript
 const style = VersaTilesStyle.colorful({
@@ -54,14 +52,8 @@ const style = VersaTilesStyle.colorful({
 });
 ```
 
-To learn more about all the options provided by "versatiles-style", take a look at the [API documentation](https://versatiles.org/versatiles-style/index.html), e.g.:
-
-- [StyleBuilderOptions](https://versatiles.org/versatiles-style/interfaces/StyleBuilderOptions.html) for all options provided by the style functions.
-- [RecolorOptions](https://versatiles.org/versatiles-style/interfaces/RecolorOptions.html) for the property `recolor` to change overall brightness, contrast, saturation, gamma, etc.
-- [StyleBuilderColors](https://versatiles.org/versatiles-style/interfaces/StyleBuilderColors.html) for the property `colors` to change individual colors.
-
 > [!NOTE]
-> ["versatiles-style"](https://github.com/versatiles-org/versatiles-style) helped us a lot in making it easier to work with map styles. However, many features are missing. That is why we plan to completely revamp the entire library in 2026.
+> [versatiles-style](https://github.com/versatiles-org/versatiles-style) is actively evolving. Expect API changes as we expand its capabilities.
 
 > [!WARNING]
 > Instead of loading the libraries from tiles.versatiles.org, we recommend including them directly in your project and hosting them yourself. Since we regularly update the front-end libraries on our demo server, future updates may affect your project.
