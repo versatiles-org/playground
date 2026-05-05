@@ -4,7 +4,7 @@ import handler from 'serve-handler';
 
 import build from './build.ts';
 
-build(true);
+await build();
 
 const fsRoot = path.resolve(import.meta.dirname, '../docs');
 
@@ -12,7 +12,7 @@ const server = http.createServer((req, res) => {
 	if (req.method !== 'GET') return ignore(res);
 	if (/\.icp$/.test(req.url ?? '')) return ignore(res);
 
-	return handler(req, res, { public: fsRoot });
+	return handler(req, res, { public: fsRoot, cleanUrls: false });
 });
 
 server.listen(8080, () => {

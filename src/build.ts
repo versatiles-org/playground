@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import * as esbuild from 'esbuild';
 import toc from '../playground/toc.ts';
-import { getLiveCodesConfig } from './lib/livecodes.ts';
 import { Eta } from 'eta';
 import { copyAssets } from './lib/utils.ts';
 import { Example, parseMarkdown } from './lib/markdown.ts';
@@ -9,10 +9,22 @@ import { Page } from 'cheerio_cms';
 
 const projectRoot = path.resolve(import.meta.dirname, '..');
 
-export default async function build(preview = false) {
+export default async function build() {
 	process.chdir(projectRoot);
 
 	fs.rmSync('./docs', { recursive: true, force: true });
+	fs.mkdirSync('./docs', { recursive: true });
+
+	await esbuild.build({
+		entryPoints: [path.join(import.meta.dirname, 'playground-component/index.ts')],
+		bundle: true,
+		format: 'esm',
+		outfile: './docs/playground.js',
+		target: 'es2022',
+		loader: { '.css': 'text' },
+		minify: true,
+		logLevel: 'warning',
+	});
 
 	const template = await (await fetch('https://versatiles.org/playground.html')).text();
 	const eta = new Eta({ views: path.join(import.meta.dirname, 'templates') });
@@ -28,24 +40,12 @@ export default async function build(preview = false) {
 		}),
 	}));
 
-	const style = [
-		'margin:5em auto',
-		'width:min(1200px,100vw)',
-		'height:500px',
-		'position:relative',
-		'left:calc(50% - min(1200px,100vw) / 2)',
-		'border:none',
-		'border-radius:8px',
-	].join(';');
-
 	for (const example of allExamples) {
 		const { slug } = example;
 		fs.mkdirSync(`./docs/${slug}`, { recursive: true });
 		copyAssets(`./playground/${slug}`, `./docs/${slug}`);
 
-		const config = getLiveCodesConfig(example);
-		fs.writeFileSync(`./docs/${slug}/config.json`, JSON.stringify(config));
-		const content = eta.render('page', { ...example, config, preview, style });
+		const content = eta.render('page', example);
 		buildPage(content, example);
 	}
 

@@ -1,0 +1,85 @@
+.vp-playground {
+	--vp-bg: #1e1e2e;
+	--vp-panel: #232334;
+	--vp-text: #e4e4e7;
+	--vp-muted: #a1a1aa;
+	--vp-accent: #60a5fa;
+	--vp-border: #38384a;
+
+	display: flex;
+	flex-direction: column;
+	margin: 5em auto;
+	max-width: 1200px;
+	width: 100%;
+	background: var(--vp-panel);
+	border: 1px solid var(--vp-border);
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	color: var(--vp-text);
+	font-family: system-ui, -apple-system, sans-serif;
+	box-sizing: border-box;
+}
+
+.vp-playground *,
+.vp-playground *::before,
+.vp-playground *::after {
+	box-sizing: border-box;
+}
+
+.vp-playground .vp-pane {
+	display: flex;
+	flex-direction: column;
+}
+
+.vp-playground .vp-label {
+	padding: 0.5rem 0.75rem;
+	font-size: 0.7rem;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var(--vp-muted);
+	background: #1a1a28;
+	border-bottom: 1px solid var(--vp-border);
+}
+
+.vp-playground .vp-pane-code {
+	border-top: 1px solid var(--vp-border);
+}
+
+.vp-playground .vp-preview-wrap {
+	background: white;
+	height: 500px;
+}
+
+.vp-playground .vp-preview {
+	width: 100%;
+	height: 100%;
+	border: none;
+	display: block;
+}
+
+.vp-playground .vp-editor {
+	display: block;
+	margin: 0;
+	padding: 0.75rem;
+	background: var(--vp-bg);
+	color: var(--vp-text);
+	font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+	font-size: 12.5px;
+	line-height: 1.55;
+	outline: none;
+	tab-size: 2;
+	white-space: pre;
+	overflow: auto;
+	max-height: 60vh;
+}
+
+.vp-playground .vp-editor:focus {
+	box-shadow: inset 0 0 0 2px var(--vp-accent);
+}
+
+@media (max-width: 800px) {
+	.vp-playground .vp-preview-wrap {
+		height: 60vh;
+	}
+}

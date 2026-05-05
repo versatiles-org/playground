@@ -1,0 +1,49 @@
+import prismCss from 'prismjs/themes/prism-tomorrow.css';
+import vpCss from './styles.css';
+import Prism from 'prismjs';
+import { CodeJar } from 'codejar';
+
+const styleEl = document.createElement('style');
+styleEl.textContent = `${prismCss}\n${vpCss}`;
+document.head.appendChild(styleEl);
+
+async function mount(root: HTMLElement) {
+	const snippetUrl = root.dataset.snippet ?? './code.html';
+	const snippet = await (await fetch(snippetUrl)).text();
+
+	root.innerHTML = `
+		<div class="vp-pane vp-pane-preview">
+			<div class="vp-label">Preview</div>
+			<div class="vp-preview-wrap">
+				<iframe class="vp-preview" sandbox="allow-scripts allow-same-origin allow-popups" title="Preview"></iframe>
+			</div>
+		</div>
+		<div class="vp-pane vp-pane-code">
+			<div class="vp-label">code.html</div>
+			<code class="vp-editor language-markup" spellcheck="false"></code>
+		</div>
+	`;
+
+	const editorEl = root.querySelector<HTMLElement>('.vp-editor')!;
+	const iframe = root.querySelector<HTMLIFrameElement>('iframe.vp-preview')!;
+
+	const jar = CodeJar(
+		editorEl,
+		(el) => Prism.highlightElement(el),
+		{ tab: '\t', indentOn: /[<{]$/ },
+	);
+	jar.updateCode(snippet);
+
+	const run = () => { iframe.srcdoc = editorEl.textContent ?? ''; };
+	run();
+
+	let debounceId: ReturnType<typeof setTimeout> | undefined;
+	editorEl.addEventListener('input', () => {
+		clearTimeout(debounceId);
+		debounceId = setTimeout(run, 1000);
+	});
+}
+
+document.querySelectorAll<HTMLElement>('.vp-playground').forEach((el) => {
+	mount(el).catch((err) => console.error('[vp-playground] mount failed', err));
+});

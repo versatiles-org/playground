@@ -14,12 +14,21 @@ for (const entry of toc) {
 		console.log(`Screenshot for ${example}`);
 		await page.goto(`http://localhost:8080/${example}/`);
 
-		const iframe = await page.$('#livecodes');
-		if (!iframe) throw new Error(`No iframe found for ${example}`);
-		await iframe.scrollIntoView();
-		await new Promise((r) => setTimeout(r, 8000));
+		const playground = await page.$('.vp-playground');
+		if (!playground) throw new Error(`No .vp-playground found for ${example}`);
+		await playground.scrollIntoView();
 
-		const clip = await iframe.boundingBox();
+		await page.waitForFunction(
+			() => {
+				const iframe = document.querySelector<HTMLIFrameElement>('.vp-playground iframe.vp-preview');
+				return !!iframe?.contentDocument?.querySelector('.maplibregl-canvas');
+			},
+			{ timeout: 30000 },
+		);
+		// Allow tiles to render
+		await new Promise((r) => setTimeout(r, 3000));
+
+		const clip = await playground.boundingBox();
 		if (!clip) throw new Error(`No bounding box found for ${example}`);
 		const buffer = await page.screenshot({
 			type: 'png',
