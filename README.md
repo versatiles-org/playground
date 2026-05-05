@@ -39,7 +39,7 @@ This project uses the free [LiveCodes](https://github.com/live-codes/livecodes) 
 To generate all web pages from the examples:
 
 ```bash
-deno task build
+npm run build
 ```
 
 ### Run in Development Mode
@@ -47,7 +47,7 @@ deno task build
 To start a local development server:
 
 ```bash
-deno task dev
+npm run dev
 ```
 
 ---
@@ -71,14 +71,14 @@ To add a new example to the playground:
 
 4. **Preview Locally:**
 
-   - Start the development server with `deno task dev`.
+   - Start the development server with `npm run dev`.
    - Open [http://localhost:8080](http://localhost:8080) in your browser.
 
 5. **Iterate:**
 
    Improve your `code.html` and `text.md` files to refine your example and documentation.
 
-Screenshots are automatically generated during [deployment](https://github.com/versatiles-org/playground/blob/main/.github/workflows/gh-release.yml). You can test the screenshots with `deno task screenshots`.
+Screenshots are automatically generated during [deployment](https://github.com/versatiles-org/playground/blob/main/.github/workflows/gh-release.yml). You can test the screenshots with `npm run screenshots`.
 
 ---
 

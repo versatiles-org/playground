@@ -1,0 +1,35 @@
+{
+	"name": "versatiles-playground",
+	"version": "0.0.0",
+	"private": true,
+	"description": "A playground to show how to use VersaTiles in a web frontend.",
+	"homepage": "https://github.com/versatiles-org/playground#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/versatiles-org/playground.git"
+	},
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"build": "tsx src/build.ts",
+		"dev": "tsx watch --clear-screen=false --include=./playground/** src/dev.ts",
+		"screenshots": "tsx src/screenshots.ts",
+		"check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"cheerio_cms": "^1.0.1",
+		"eta": "^3.5.0",
+		"gray-matter": "^4.0.3",
+		"livecodes": "^0.11.1",
+		"marked": "^15.0.0",
+		"marked-alert": "^2.1.2",
+		"puppeteer": "^24.20.0",
+		"serve-handler": "^6.1.6"
+	},
+	"devDependencies": {
+		"@types/node": "^22.0.0",
+		"@types/serve-handler": "^6.1.4",
+		"tsx": "^4.19.0",
+		"typescript": "^5.6.0"
+	}
+}

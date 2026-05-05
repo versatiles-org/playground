@@ -1,5 +1,9 @@
-import { extractYaml } from '@std/front-matter';
-import { render } from '@deno/gfm';
+import * as fs from 'node:fs';
+import matter from 'gray-matter';
+import { Marked } from 'marked';
+import markedAlert from 'marked-alert';
+
+const marked = new Marked().use(markedAlert());
 
 export interface Example {
 	slug: string;
@@ -12,9 +16,8 @@ export function parseMarkdown(
 	name: string,
 	filePath: string,
 ): Example {
-	const data = Deno.readTextFileSync(filePath);
-
-	const { body, attrs } = extractYaml(data);
+	const data = fs.readFileSync(filePath, 'utf-8');
+	const { content, data: attrs } = matter(data);
 
 	const { title, description } = attrs as Record<string, unknown>;
 
@@ -30,6 +33,6 @@ export function parseMarkdown(
 		slug: name,
 		title: title.trim(),
 		description: description.trim(),
-		body: render(body.trim(), {}),
+		body: marked.parse(content.trim()) as string,
 	};
 }

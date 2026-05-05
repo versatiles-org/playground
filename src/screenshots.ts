@@ -1,3 +1,4 @@
+import * as fs from 'node:fs';
 import toc from '../playground/toc.ts';
 import server from './dev.ts';
 import puppeteer from 'puppeteer';
@@ -15,7 +16,7 @@ for (const entry of toc) {
 
 		const iframe = await page.$('#livecodes');
 		if (!iframe) throw new Error(`No iframe found for ${example}`);
-		iframe.scrollIntoView();
+		await iframe.scrollIntoView();
 		await new Promise((r) => setTimeout(r, 8000));
 
 		const clip = await iframe.boundingBox();
@@ -25,11 +26,11 @@ for (const entry of toc) {
 			encoding: 'binary',
 			clip,
 			captureBeyondViewport: false,
-		}) as Uint8Array;
-		await Deno.writeFile(`./playground/${example}/preview.png`, buffer);
+		});
+		fs.writeFileSync(`./playground/${example}/preview.png`, buffer);
 	}
 }
 
 await page.close();
 await browser.close();
-await server.shutdown();
+await new Promise<void>((resolve) => server.close(() => resolve()));

@@ -1,3 +1,4 @@
+import * as fs from 'node:fs';
 import type { Config } from 'livecodes';
 import { Example } from './markdown.ts';
 
@@ -6,14 +7,11 @@ export function getLiveCodesConfig(
 ): Config {
 	const { slug: name, title, description } = example;
 	const filename = `./playground/${name}/code.html`;
-	try {
-		Deno.statSync(filename);
-	} catch (error) {
-		if (error instanceof Deno.errors.NotFound) throw new Error(`File not found: ${filename}`);
-		throw error;
+	if (!fs.existsSync(filename)) {
+		throw new Error(`File not found: ${filename}`);
 	}
 
-	const content = Deno.readTextFileSync(filename);
+	const content = fs.readFileSync(filename, 'utf-8');
 	return {
 		activeEditor: 'markup',
 		allowLangChange: true,

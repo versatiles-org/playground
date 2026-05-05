@@ -1,3 +1,5 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import toc from '../playground/toc.ts';
 import { getLiveCodesConfig } from './lib/livecodes.ts';
 import { Eta } from 'eta';
@@ -5,15 +7,15 @@ import { copyAssets } from './lib/utils.ts';
 import { Example, parseMarkdown } from './lib/markdown.ts';
 import { Page } from 'cheerio_cms';
 
-export default async function build(preview = false) {
-	Deno.chdir((new URL('..', import.meta.url)).pathname);
+const projectRoot = path.resolve(import.meta.dirname, '..');
 
-	try {
-		Deno.removeSync('./docs', { recursive: true });
-	} catch (_) { /* */ }
+export default async function build(preview = false) {
+	process.chdir(projectRoot);
+
+	fs.rmSync('./docs', { recursive: true, force: true });
 
 	const template = await (await fetch('https://versatiles.org/playground.html')).text();
-	const eta = new Eta({ views: (new URL('./templates', import.meta.url)).pathname });
+	const eta = new Eta({ views: path.join(import.meta.dirname, 'templates') });
 
 	const allExamples: Example[] = [];
 
@@ -38,11 +40,11 @@ export default async function build(preview = false) {
 
 	for (const example of allExamples) {
 		const { slug } = example;
-		Deno.mkdirSync(`./docs/${slug}`, { recursive: true });
+		fs.mkdirSync(`./docs/${slug}`, { recursive: true });
 		copyAssets(`./playground/${slug}`, `./docs/${slug}`);
 
 		const config = getLiveCodesConfig(example);
-		Deno.writeTextFileSync(`./docs/${slug}/config.json`, JSON.stringify(config));
+		fs.writeFileSync(`./docs/${slug}/config.json`, JSON.stringify(config));
 		const content = eta.render('page', { ...example, config, preview, style });
 		buildPage(content, example);
 	}
@@ -63,8 +65,8 @@ export default async function build(preview = false) {
 		}
 
 		const html = page.render();
-		Deno.writeTextFileSync(`./docs/${example ? `${example.slug}/` : ''}index.html`, html);
+		fs.writeFileSync(`./docs/${example ? `${example.slug}/` : ''}index.html`, html);
 	}
 }
 
-if (import.meta.main) await build();
+if (import.meta.url === `file://${process.argv[1]}`) await build();

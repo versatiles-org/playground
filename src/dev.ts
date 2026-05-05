@@ -1,20 +1,27 @@
-import { serveDir } from '@std/http/file-server';
+import * as http from 'node:http';
+import * as path from 'node:path';
+import handler from 'serve-handler';
 
 import build from './build.ts';
 
 build(true);
 
-const fsRoot = (new URL('../docs', import.meta.url)).pathname;
+const fsRoot = path.resolve(import.meta.dirname, '../docs');
 
-const server = Deno.serve({ port: 8080 }, (req: Request) => {
-	if (req.method !== 'GET') return ignore();
-	if (/\.icp$/.test(req.url)) return ignore();
+const server = http.createServer((req, res) => {
+	if (req.method !== 'GET') return ignore(res);
+	if (/\.icp$/.test(req.url ?? '')) return ignore(res);
 
-	return serveDir(req, { fsRoot, urlRoot: '', quiet: true });
-
-	function ignore() {
-		return new Response('ignore', { status: 404 });
-	}
+	return handler(req, res, { public: fsRoot });
 });
+
+server.listen(8080, () => {
+	console.log('Listening on http://localhost:8080');
+});
+
+function ignore(res: http.ServerResponse) {
+	res.statusCode = 404;
+	res.end('ignore');
+}
 
 export default server;

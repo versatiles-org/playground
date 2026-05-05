@@ -18,28 +18,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Set up Deno
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-          cache: true
-
-      - name: Install dependencies
-        run: deno install --allow-scripts=npm:puppeteer
-
-      - name: Check
-        run: deno task check
-
-      - name: Build Screenshots
-        run: deno task screenshots
-
-      - name: Build Pages
-        run: deno task build
-
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check
+        run: npm run check
+
+      - name: Build Screenshots
+        run: npm run screenshots
+
+      - name: Build Pages
+        run: npm run build
 
       - name: Build LiveCodes
         run: ./scripts/build_livecodes.sh
