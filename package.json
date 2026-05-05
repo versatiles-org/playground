@@ -17,7 +17,7 @@
 		"format": "prettier --write src/",
 		"lint": "eslint .",
 		"screenshots": "tsx src/screenshots.ts",
-		"upgrade": "npx npm-check-updates -u && npm install"
+		"upgrade": "npm-check-updates -u && npm install"
 	},
 	"dependencies": {
 		"cheerio_cms": "^1.1.0",
