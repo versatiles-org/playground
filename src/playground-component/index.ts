@@ -34,7 +34,7 @@ async function mount(root: HTMLElement) {
 	);
 	jar.updateCode(snippet);
 
-	const run = () => { iframe.srcdoc = editorEl.textContent ?? ''; };
+	const run = () => { iframe.srcdoc = withDefaultStyle(editorEl.textContent ?? ''); };
 	run();
 
 	let debounceId: ReturnType<typeof setTimeout> | undefined;
@@ -42,6 +42,13 @@ async function mount(root: HTMLElement) {
 		clearTimeout(debounceId);
 		debounceId = setTimeout(run, 1000);
 	});
+}
+
+function withDefaultStyle(html: string): string {
+	const tag = '<style>body{margin:0;}</style>';
+	if (html.includes('</head>')) return html.replace('</head>', tag + '</head>');
+	if (/<body\b[^>]*>/i.test(html)) return html.replace(/<body\b[^>]*>/i, (m) => m + tag);
+	return tag + html;
 }
 
 document.querySelectorAll<HTMLElement>('.vp-playground').forEach((el) => {
