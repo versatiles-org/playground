@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import toc from '../playground/toc.ts';
-import server from './dev.ts';
+import server, { url } from './dev.ts';
 import puppeteer from 'puppeteer';
 
 const browser = await puppeteer.launch({
@@ -12,7 +12,7 @@ const page = await browser.newPage();
 for (const entry of toc) {
 	for (const example of entry.examples) {
 		console.log(`Screenshot for ${example}`);
-		await page.goto(`http://localhost:8080/${example}/?screenshot=1`);
+		await page.goto(`${url}/${example}/?screenshot=1`);
 
 		await page.waitForSelector('.vp-playground.vp-screenshot', { timeout: 10000 });
 		const playground = (await page.$('.vp-playground.vp-screenshot'))!;
