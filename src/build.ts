@@ -60,7 +60,8 @@ export default async function build() {
 			.setGithubLink(`https://github.com/versatiles-org/playground/${githubUrl}`)
 			.setContent(content);
 		if (example) {
-			page.setTitle(`Versatiles Playground - ${example.title}`, example.description)
+			page
+				.setTitle(`Versatiles Playground - ${example.title}`, example.description)
 				.setSocialImage(`https://versatiles.org/playground/${example.slug}/preview.png`);
 		}
 

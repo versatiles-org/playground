@@ -27,14 +27,15 @@ async function mount(root: HTMLElement) {
 	const editorEl = root.querySelector<HTMLElement>('.vp-editor')!;
 	const iframe = root.querySelector<HTMLIFrameElement>('iframe.vp-preview')!;
 
-	const jar = CodeJar(
-		editorEl,
-		(el) => Prism.highlightElement(el),
-		{ tab: '\t', indentOn: /[<{]$/ },
-	);
+	const jar = CodeJar(editorEl, (el) => Prism.highlightElement(el), {
+		tab: '\t',
+		indentOn: /[<{]$/,
+	});
 	jar.updateCode(snippet);
 
-	const run = () => { iframe.srcdoc = withDefaultStyle(editorEl.textContent ?? ''); };
+	const run = () => {
+		iframe.srcdoc = withDefaultStyle(editorEl.textContent ?? '');
+	};
 	run();
 
 	let debounceId: ReturnType<typeof setTimeout> | undefined;

@@ -20,7 +20,9 @@ for (const entry of toc) {
 
 		await page.waitForFunction(
 			() => {
-				const iframe = document.querySelector<HTMLIFrameElement>('.vp-playground iframe.vp-preview');
+				const iframe = document.querySelector<HTMLIFrameElement>(
+					'.vp-playground iframe.vp-preview',
+				);
 				return !!iframe?.contentDocument?.querySelector('.maplibregl-canvas');
 			},
 			{ timeout: 30000 },

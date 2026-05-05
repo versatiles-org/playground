@@ -11,7 +11,10 @@
 	gap: 1rem;
 	margin: 5em auto;
 	color: var(--vp-text);
-	font-family: system-ui, -apple-system, sans-serif;
+	font-family:
+		system-ui,
+		-apple-system,
+		sans-serif;
 	box-sizing: border-box;
 }
 
@@ -65,7 +68,7 @@
 	padding: 0.75rem;
 	background: var(--vp-bg);
 	color: var(--vp-text);
-	font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+	font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 	font-size: 12.5px;
 	line-height: 1.55;
 	outline: none;

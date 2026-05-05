@@ -12,10 +12,7 @@ export interface Example {
 	body: string;
 }
 
-export function parseMarkdown(
-	name: string,
-	filePath: string,
-): Example {
+export function parseMarkdown(name: string, filePath: string): Example {
 	const data = fs.readFileSync(filePath, 'utf-8');
 	const { content, data: attrs } = matter(data);
 
