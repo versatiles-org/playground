@@ -12,7 +12,7 @@
 
 	<!-- Initialize the map -->
 	<script>
-		const coordinates = [12.3393987, 45.4333365];
+		const coordinates = [12.3393987, 45.4333365]; // Venice
 
 		const map = new maplibregl.Map({
 			container: 'map',
@@ -23,6 +23,7 @@
 
 		const marker = new maplibregl.Marker({ color: '#c00' })
 			.setLngLat(coordinates)
+			.setPopup(new maplibregl.Popup().setHTML('<strong>Venice</strong>'))
 			.addTo(map);
 	</script>
 </body>
