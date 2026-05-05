@@ -12,6 +12,14 @@ const projectRoot = path.resolve(import.meta.dirname, '..');
 export default async function build() {
 	process.chdir(projectRoot);
 
+	for (const group of toc) {
+		for (const slug of group.examples) {
+			if (!fs.existsSync(`./playground/${slug}`)) {
+				throw new Error(`toc.ts lists "${slug}" but playground/${slug}/ does not exist`);
+			}
+		}
+	}
+
 	fs.rmSync('./docs', { recursive: true, force: true });
 	fs.mkdirSync('./docs', { recursive: true });
 
@@ -70,4 +78,4 @@ export default async function build() {
 	}
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) await build();
+if (import.meta.filename === process.argv[1]) await build();
