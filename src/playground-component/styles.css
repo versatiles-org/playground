@@ -23,6 +23,16 @@
 		box-sizing: border-box;
 	}
 
+	.vp-error {
+		padding: 1rem;
+		background: var(--vp-panel);
+		border: 1px solid var(--vp-border);
+		border-radius: 10px;
+		color: #fca5a5;
+		font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+		font-size: 13px;
+	}
+
 	.vp-pane {
 		display: flex;
 		flex-direction: column;

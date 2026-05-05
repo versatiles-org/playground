@@ -9,8 +9,13 @@ document.head.appendChild(styleEl);
 
 async function mount(root: HTMLElement) {
 	const snippetUrl = root.dataset.snippet ?? './code.html';
-	const snippet = await (await fetch(snippetUrl)).text();
+	const response = await fetch(snippetUrl);
+	if (!response.ok) throw new Error(`Failed to fetch ${snippetUrl}: ${response.status}`);
+	const snippet = await response.text();
 
+	// allow-same-origin + allow-scripts is the canonical "sandbox escape" combo, but
+	// MapLibre's web workers and tile fetches need both. With srcdoc the iframe inherits
+	// the parent origin anyway, so this isn't loosening anything in practice.
 	root.innerHTML = `
 		<div class="vp-pane vp-pane-preview">
 			<div class="vp-label">Preview</div>
@@ -52,9 +57,16 @@ function withDefaultStyle(html: string): string {
 	return tag + html;
 }
 
+function showError(root: HTMLElement, err: unknown) {
+	const message = err instanceof Error ? err.message : String(err);
+	const escaped = message.replace(/[<>&]/g, (c) => `&#${c.charCodeAt(0)};`);
+	root.innerHTML = `<div class="vp-error">Failed to load playground: ${escaped}</div>`;
+	console.error('[vp-playground] mount failed', err);
+}
+
 const screenshotMode = new URLSearchParams(location.search).has('screenshot');
 
 document.querySelectorAll<HTMLElement>('.vp-playground').forEach((el) => {
 	if (screenshotMode) el.classList.add('vp-screenshot');
-	mount(el).catch((err) => console.error('[vp-playground] mount failed', err));
+	mount(el).catch((err) => showError(el, err));
 });
