@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 # VersaTiles Playground
 
 A web-based playground demonstrating how to use [VersaTiles](https://versatiles.org) in a frontend environment.
