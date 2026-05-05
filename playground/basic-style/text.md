@@ -17,8 +17,8 @@ Loading our library adds the global variable `VersaTilesStyle` to the JavaScript
 const style = VersaTilesStyle.colorful(); // <- generates a style
 
 new maplibregl.Map({
-	style // <- use the style
-	container: "map",
+	container: 'map',
+	style, // <- use the style
 })
 ```
 
@@ -60,8 +60,8 @@ To learn more about all the options provided by "versatiles-style", take a look 
 - [RecolorOptions](https://versatiles.org/versatiles-style/interfaces/RecolorOptions.html) for the property `recolor` to change overall brightness, contrast, saturation, gamma, etc.
 - [StyleBuilderColors](https://versatiles.org/versatiles-style/interfaces/StyleBuilderColors.html) for the property `colors` to change individual colors.
 
-> [!NOTE]\
-> ["versatiles-style"](https://github.com/versatiles-org/versatiles-style) helped us a lot in making it easier to work with map styles. However, many features are missing. That is why we plan to completely revamp the entire library in 2025.
+> [!NOTE]
+> ["versatiles-style"](https://github.com/versatiles-org/versatiles-style) helped us a lot in making it easier to work with map styles. However, many features are missing. That is why we plan to completely revamp the entire library in 2026.
 
 > [!WARNING]
 > Instead of loading the libraries from tiles.versatiles.org, we recommend including them directly in your project and hosting them yourself. Since we regularly update the front-end libraries on our demo server, future updates may affect your project.
