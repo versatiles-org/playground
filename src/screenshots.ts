@@ -5,17 +5,17 @@ import puppeteer from 'puppeteer';
 
 const browser = await puppeteer.launch({
 	headless: true,
-	defaultViewport: { width: 1000, height: 1000, deviceScaleFactor: 1 },
+	defaultViewport: { width: 1800, height: 1000, deviceScaleFactor: 1 },
 });
 const page = await browser.newPage();
 
 for (const entry of toc) {
 	for (const example of entry.examples) {
 		console.log(`Screenshot for ${example}`);
-		await page.goto(`http://localhost:8080/${example}/`);
+		await page.goto(`http://localhost:8080/${example}/?screenshot=1`);
 
-		const playground = await page.$('.vp-playground');
-		if (!playground) throw new Error(`No .vp-playground found for ${example}`);
+		await page.waitForSelector('.vp-playground.vp-screenshot', { timeout: 10000 });
+		const playground = (await page.$('.vp-playground.vp-screenshot'))!;
 		await playground.scrollIntoView();
 
 		await page.waitForFunction(
@@ -34,7 +34,7 @@ for (const entry of toc) {
 			type: 'png',
 			encoding: 'binary',
 			clip,
-			captureBeyondViewport: false,
+			captureBeyondViewport: true,
 		});
 		fs.writeFileSync(`./playground/${example}/preview.png`, buffer);
 	}

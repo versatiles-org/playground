@@ -14,8 +14,11 @@ const server = http.createServer((req, res) => {
 
 	// serve-handler with cleanUrls:false skips index.html resolution for directory
 	// requests, so do it manually to match GitHub Pages behavior.
-	const url = req.url ?? '/';
-	if (url.endsWith('/')) req.url = url + 'index.html';
+	const raw = req.url ?? '/';
+	const queryIdx = raw.indexOf('?');
+	const pathname = queryIdx === -1 ? raw : raw.slice(0, queryIdx);
+	const query = queryIdx === -1 ? '' : raw.slice(queryIdx);
+	if (pathname.endsWith('/')) req.url = pathname + 'index.html' + query;
 
 	return handler(req, res, { public: fsRoot, cleanUrls: false });
 });

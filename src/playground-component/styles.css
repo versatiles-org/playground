@@ -84,3 +84,37 @@
 		height: 60vh;
 	}
 }
+
+/* Screenshot mode: fixed 16:9 frame, code on the left, preview on the right. */
+.vp-playground.vp-screenshot {
+	flex-direction: row-reverse;
+	gap: 0;
+	margin: 0;
+	width: 1280px;
+	height: 720px;
+	max-width: none;
+}
+
+.vp-playground.vp-screenshot .vp-pane {
+	flex: 1 1 50%;
+	width: 50%;
+	height: 100%;
+	border-radius: 0;
+	border: none;
+	box-shadow: none;
+}
+
+.vp-playground.vp-screenshot .vp-pane-code {
+	position: static;
+	left: auto;
+}
+
+.vp-playground.vp-screenshot .vp-preview-wrap {
+	flex: 1;
+	height: auto;
+}
+
+.vp-playground.vp-screenshot .vp-editor {
+	flex: 1;
+	max-height: none;
+}

@@ -51,6 +51,9 @@ function withDefaultStyle(html: string): string {
 	return tag + html;
 }
 
+const screenshotMode = new URLSearchParams(location.search).has('screenshot');
+
 document.querySelectorAll<HTMLElement>('.vp-playground').forEach((el) => {
+	if (screenshotMode) el.classList.add('vp-screenshot');
 	mount(el).catch((err) => console.error('[vp-playground] mount failed', err));
 });

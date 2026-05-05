@@ -13,7 +13,7 @@
 	</div>
 	<div style="flex-shrink: 0; flex-grow: 0;">
 		<a href="<%~ example.slug %>/" style="text-decoration:none">
-			<img src="<%~ example.slug %>/preview.png" alt="<%= example.title %>" width="300" height="150" />
+			<img src="<%~ example.slug %>/preview.png" alt="<%= example.title %>" width="320" height="180" />
 		</a>
 	</div>
 </div>
