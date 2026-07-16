@@ -12,10 +12,11 @@
 	"type": "module",
 	"scripts": {
 		"build": "tsx src/build.ts",
-		"check": "tsc --noEmit && eslint . && prettier --check src/",
+		"check": "npm run typecheck && npm run lint && npm run format",
 		"dev": "tsx watch --clear-screen=false --include=./playground/** src/dev.ts",
 		"format": "prettier --write src/",
 		"lint": "eslint .",
+		"typecheck": "tsc --noEmit",
 		"screenshots": "tsx src/screenshots.ts",
 		"upgrade": "npm-check-updates -u && npm install"
 	},
