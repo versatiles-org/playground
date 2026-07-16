@@ -24,7 +24,6 @@ try {
 
 				await page.waitForSelector('.vp-playground.vp-screenshot', { timeout: 10000 });
 				const playground = (await page.$('.vp-playground.vp-screenshot'))!;
-				await playground.scrollIntoView();
 
 				if (!(await waitForMapRendered(page, tracker))) {
 					throw new Error(
@@ -32,14 +31,10 @@ try {
 					);
 				}
 
-				const clip = await playground.boundingBox();
-				if (!clip) throw new Error(`No bounding box found for ${example}`);
-				const buffer = await page.screenshot({
-					type: 'png',
-					encoding: 'binary',
-					clip,
-					captureBeyondViewport: true,
-				});
+				// Screenshot the element directly rather than clipping the page to its
+				// boundingBox(): the box is viewport-relative while page.screenshot()
+				// clips in document coordinates, so any page scroll offsets the capture.
+				const buffer = await playground.screenshot({ type: 'png', encoding: 'binary' });
 				fs.writeFileSync(`./playground/${example}/preview.png`, buffer);
 			} finally {
 				tracker.stop();
