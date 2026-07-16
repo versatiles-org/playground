@@ -21,7 +21,10 @@ concurrency:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # Matches the deploy workflow, which runs the same smoke test. Puppeteer's
+    # Chrome cannot launch on ubuntu-latest: Ubuntu 24.04 blocks unprivileged
+    # user namespaces via AppArmor, so Chrome finds "no usable sandbox".
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
