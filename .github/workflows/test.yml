@@ -5,6 +5,11 @@ on:
   push:
     branches:
       - main
+  # The examples load MapLibre, styles and tiles from tiles.versatiles.org at
+  # unversioned paths, so an upstream update can break the published playground
+  # with no commit here. A daily run catches that instead of waiting for a push.
+  schedule:
+    - cron: "23 5 * * *"
   workflow_dispatch:
 
 permissions:
