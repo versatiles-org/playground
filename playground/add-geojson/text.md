@@ -14,6 +14,9 @@ This example loads the boundary of the [Val Suzon](https://en.wikipedia.org/wiki
 
 One source can feed many layers. In this example we use one GeoJSON source with two layers: a translucent `fill` for the polygon's interior and a dashed `line` for its outline.
 
+> [!IMPORTANT]
+> `addSource()` and `addLayer()` only work after the map style has finished loading, otherwise MapLibre throws `Style is not done loading`. Since the style is fetched over the network, always wait for the [`load` event](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#load) — here via `await map.once('load')` — before touching sources or layers.
+
 ### Layer types
 
 The most common types (see the full list in the [Style Specification](https://maplibre.org/maplibre-style-spec/layers/)):

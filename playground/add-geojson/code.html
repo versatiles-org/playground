@@ -22,6 +22,9 @@
 		const response = await fetch('https://versatiles.org/playground/add-geojson/data.geojson');
 		const geojson = await response.json();
 
+		// Sources and layers can only be added once the style has loaded
+		await map.once('load');
+
 		// Add the GeoJSON data as a source
 		map.addSource('mydata', {
 			type: 'geojson',
