@@ -30,6 +30,9 @@ jobs:
       - name: Check
         run: npm run check
 
+      - name: Smoke-test examples
+        run: npm test
+
       - name: Build Screenshots
         run: npm run screenshots
 

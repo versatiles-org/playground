@@ -24,6 +24,7 @@ Each example is a self-contained HTML snippet rendered in a small in-house live 
    ├─ build.ts             # Builds all example pages and the runtime bundle
    ├─ dev.ts               # Development server (port 8080; override with PORT env var)
    ├─ screenshots.ts       # Generates 16:9 preview images for all examples
+   ├─ smoke.ts             # Loads every example in a headless browser and checks it runs
    ├─ lib/                 # Shared utility code
    ├─ playground-component/# Runtime live-editor component (bundled with esbuild)
    └─ templates/           # ETA templates
@@ -50,6 +51,16 @@ To start a local development server:
 ```bash
 npm run dev
 ```
+
+### Test the Examples
+
+To check that every example still runs:
+
+```bash
+npm run test
+```
+
+This loads each example in a headless browser and fails if the browser reported an error, an asset failed to load, or the map never painted. It does not compare pixels — tiles come from the live network, so exact colors are not reproducible.
 
 ---
 
