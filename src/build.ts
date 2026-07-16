@@ -9,16 +9,41 @@ import { Page } from 'cheerio_cms';
 
 const projectRoot = path.resolve(import.meta.dirname, '..');
 
+/**
+ * Checks that toc.ts and playground/ agree in both directions. Without the
+ * second check an unlisted example directory is silently skipped, so a new
+ * example just never appears on the site.
+ */
+function validateToc() {
+	const listed = toc.flatMap((group) => group.examples as readonly string[]);
+
+	for (const slug of listed) {
+		if (!fs.existsSync(`./playground/${slug}`)) {
+			throw new Error(`toc.ts lists "${slug}" but playground/${slug}/ does not exist`);
+		}
+	}
+
+	// Only directories that already have a code.html count as examples, so a
+	// half-scaffolded folder doesn't break `npm run dev` before it can be listed.
+	const present = fs
+		.readdirSync('./playground', { withFileTypes: true })
+		.filter((entry) => entry.isDirectory())
+		.map((entry) => entry.name)
+		.filter((slug) => fs.existsSync(`./playground/${slug}/code.html`));
+
+	const unlisted = present.filter((slug) => !listed.includes(slug));
+	if (unlisted.length > 0) {
+		throw new Error(
+			`playground/ contains ${unlisted.map((s) => `"${s}"`).join(', ')} ` +
+				`but toc.ts does not list ${unlisted.length > 1 ? 'them' : 'it'}`,
+		);
+	}
+}
+
 export default async function build() {
 	process.chdir(projectRoot);
 
-	for (const group of toc) {
-		for (const slug of group.examples) {
-			if (!fs.existsSync(`./playground/${slug}`)) {
-				throw new Error(`toc.ts lists "${slug}" but playground/${slug}/ does not exist`);
-			}
-		}
-	}
+	validateToc();
 
 	fs.rmSync('./docs', { recursive: true, force: true });
 	fs.mkdirSync('./docs', { recursive: true });
