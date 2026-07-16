@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import toc from '../playground/toc.ts';
 import server, { url } from './dev.ts';
+import { waitForNetworkQuiet } from './lib/browser.ts';
 import puppeteer from 'puppeteer';
 
 const browser = await puppeteer.launch({
@@ -28,8 +29,10 @@ try {
 				},
 				{ timeout: 30000 },
 			);
-			// Allow tiles to render
-			await new Promise((r) => setTimeout(r, 3000));
+			// Allow tiles to load and render
+			if (!(await waitForNetworkQuiet(page))) {
+				console.warn(`  network never settled for ${example}; capturing anyway`);
+			}
 
 			const clip = await playground.boundingBox();
 			if (!clip) throw new Error(`No bounding box found for ${example}`);

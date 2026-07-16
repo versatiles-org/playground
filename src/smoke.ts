@@ -1,5 +1,6 @@
 import toc from '../playground/toc.ts';
 import server, { url } from './dev.ts';
+import { waitForNetworkQuiet } from './lib/browser.ts';
 import puppeteer, { type Browser, type Page } from 'puppeteer';
 import { PNG } from 'pngjs';
 
@@ -13,7 +14,6 @@ import { PNG } from 'pngjs';
  */
 
 const TIMEOUT = 30_000;
-const TILE_RENDER_DELAY = 3000;
 
 function describe(err: unknown): string {
 	return err instanceof Error ? err.message : String(err);
@@ -53,7 +53,7 @@ async function checkExample(browser: Browser, slug: string): Promise<string[]> {
 			},
 			{ timeout: TIMEOUT },
 		);
-		await new Promise((resolve) => setTimeout(resolve, TILE_RENDER_DELAY));
+		await waitForNetworkQuiet(page);
 
 		if (!(await hasRenderedMap(page))) {
 			problems.push('map preview is blank (rendered as a single flat color)');
