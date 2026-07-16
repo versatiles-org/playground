@@ -1,3 +1,4 @@
 /docs/
 /node_modules/
 /playground/*/preview.png
+.DS_Store
