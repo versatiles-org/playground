@@ -34,7 +34,14 @@ export default async function build() {
 		logLevel: 'warning',
 	});
 
-	const template = await (await fetch('https://versatiles.org/playground.html')).text();
+	// fetch() only rejects on network failure, so an HTTP error would otherwise be
+	// baked into every generated page as if it were the template.
+	const templateUrl = 'https://versatiles.org/playground.html';
+	const response = await fetch(templateUrl);
+	if (!response.ok) {
+		throw new Error(`Failed to fetch page template ${templateUrl}: HTTP ${response.status}`);
+	}
+	const template = await response.text();
 	const eta = new Eta({ views: path.join(import.meta.dirname, 'templates') });
 
 	const allExamples: Example[] = [];
