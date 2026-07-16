@@ -10,6 +10,13 @@ on:
 permissions:
   contents: read
 
+# Pages has a single deploy target, so runs must not overlap. Queued runs
+# collapse to the latest, but an in-progress run is never cancelled: aborting
+# mid-deploy could leave the published site half-updated.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: macos-latest
