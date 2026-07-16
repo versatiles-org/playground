@@ -1,12 +1,11 @@
 import toc from '../playground/toc.ts';
 import server, { url } from './dev.ts';
-import { waitForNetworkQuiet } from './lib/browser.ts';
-import puppeteer, { type Browser, type Page } from 'puppeteer';
-import { PNG } from 'pngjs';
+import { trackNetwork, waitForMapRendered } from './lib/browser.ts';
+import puppeteer, { type Browser } from 'puppeteer';
 
 /**
- * Smoke-tests every example: loads its page, waits for the map to settle, and
- * fails if the browser reported an error or the map never painted anything.
+ * Smoke-tests every example: loads its page, waits for the map to finish
+ * rendering, and fails if the browser reported an error or the map never drew.
  *
  * Deliberately does not compare against reference images — tiles are fetched
  * from the live network, so exact pixels are not reproducible across runs or
@@ -22,6 +21,8 @@ function describe(err: unknown): string {
 async function checkExample(browser: Browser, slug: string): Promise<string[]> {
 	const problems: string[] = [];
 	const page = await browser.newPage();
+	// Created before navigating, so no request goes uncounted.
+	const tracker = trackNetwork(page);
 
 	// Errors thrown inside the srcdoc iframe surface on the parent page too.
 	page.on('pageerror', (err) => problems.push(`uncaught error: ${describe(err)}`));
@@ -39,54 +40,19 @@ async function checkExample(browser: Browser, slug: string): Promise<string[]> {
 
 	try {
 		await page.goto(`${url}/${slug}/?screenshot=1`, { waitUntil: 'domcontentloaded' });
-		const playground = await page.waitForSelector('.vp-playground.vp-screenshot', {
-			timeout: TIMEOUT,
-		});
-		if (!playground) throw new Error('playground element never appeared');
+		await page.waitForSelector('.vp-playground.vp-screenshot', { timeout: TIMEOUT });
 
-		await page.waitForFunction(
-			() => {
-				const iframe = document.querySelector<HTMLIFrameElement>(
-					'.vp-playground iframe.vp-preview',
-				);
-				return !!iframe?.contentDocument?.querySelector('.maplibregl-canvas');
-			},
-			{ timeout: TIMEOUT },
-		);
-		await waitForNetworkQuiet(page);
-
-		if (!(await hasRenderedMap(page))) {
-			problems.push('map preview is blank (rendered as a single flat color)');
+		if (!(await waitForMapRendered(page, tracker, { timeoutMs: TIMEOUT }))) {
+			problems.push('map never finished rendering (canvas stayed blank or kept changing)');
 		}
 	} catch (err) {
 		problems.push(describe(err));
 	} finally {
+		tracker.stop();
 		await page.close();
 	}
 
 	return problems;
-}
-
-/**
- * True if the rendered map shows more than one distinct color.
- *
- * Screenshots the preview iframe rather than reading the WebGL canvas directly:
- * MapLibre runs without `preserveDrawingBuffer`, so drawImage/toDataURL on its
- * canvas yield an empty buffer. Puppeteer captures via the compositor instead.
- */
-async function hasRenderedMap(page: Page): Promise<boolean> {
-	const iframe = await page.$('.vp-playground iframe.vp-preview');
-	if (!iframe) return false;
-
-	const buffer = await iframe.screenshot({ type: 'png', encoding: 'binary' });
-	const { data } = PNG.sync.read(Buffer.from(buffer));
-
-	const colors = new Set<number>();
-	for (let i = 0; i < data.length; i += 4) {
-		colors.add((data[i] << 16) | (data[i + 1] << 8) | data[i + 2]);
-		if (colors.size > 1) return true;
-	}
-	return false;
 }
 
 const browser = await puppeteer.launch({

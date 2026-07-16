@@ -1,75 +1,143 @@
+import { createHash } from 'node:crypto';
+import { PNG } from 'pngjs';
 import type { Page } from 'puppeteer';
 
-export interface NetworkQuietOptions {
-	/** How long the network must stay idle before we call it settled. */
-	quietMs?: number;
-	/** Upper bound on the whole wait, in case something never settles. */
-	timeoutMs?: number;
-	/** Extra delay after quiet, giving the GPU time to rasterize what arrived. */
-	renderMs?: number;
+const IFRAME_SELECTOR = '.vp-playground iframe.vp-preview';
+const CANVAS_SELECTOR = '.maplibregl-canvas';
+
+export interface NetworkTracker {
+	/** Number of requests currently in flight. */
+	readonly inFlight: number;
+	/** Detach listeners. */
+	stop(): void;
 }
 
 /**
- * Waits until the page has made no requests for `quietMs`, then gives the map a
- * moment to paint. Replaces a fixed sleep: it waits longer when tiles are slow
- * and returns immediately when they are already cached.
- *
- * MapLibre's `idle` event would be the precise signal, but no example exposes
- * its Map instance to the parent frame, so we observe network traffic instead.
- * Page-level request events include those made by the preview iframe.
- *
- * Caveat of any network-idle heuristic: an idle gap longer than `quietMs` in
- * the middle of loading ends the wait early. Measured against the examples, the
- * largest mid-load gap is ~150ms (style parse into tile requests), so the 500ms
- * default leaves ~3x headroom. Raise it if an example ever loads in slow bursts.
- *
- * @returns true if the network settled, false if `timeoutMs` was hit first.
+ * Counts in-flight requests for a page. Must be created *before* navigating:
+ * puppeteer only reports requests that start after the listener is attached, so
+ * a tracker created afterwards is blind to whatever is already downloading and
+ * would report a busy network as idle.
  */
-export async function waitForNetworkQuiet(
-	page: Page,
-	{ quietMs = 500, timeoutMs = 15_000, renderMs = 300 }: NetworkQuietOptions = {},
-): Promise<boolean> {
+export function trackNetwork(page: Page): NetworkTracker {
 	let inFlight = 0;
 
-	const settled = await new Promise<boolean>((resolve) => {
-		let quietTimer: ReturnType<typeof setTimeout> | undefined;
+	const onRequest = () => void inFlight++;
+	const onSettled = () => void (inFlight = Math.max(0, inFlight - 1));
 
-		const finish = (value: boolean) => {
-			clearTimeout(quietTimer);
-			clearTimeout(hardTimer);
+	page.on('request', onRequest);
+	page.on('requestfinished', onSettled);
+	page.on('requestfailed', onSettled);
+
+	return {
+		get inFlight() {
+			return inFlight;
+		},
+		stop() {
 			page.off('request', onRequest);
 			page.off('requestfinished', onSettled);
 			page.off('requestfailed', onSettled);
-			resolve(value);
-		};
+		},
+	};
+}
 
-		const armQuietTimer = () => {
-			clearTimeout(quietTimer);
-			quietTimer = setTimeout(() => finish(true), quietMs);
-		};
+interface PreviewState {
+	/** Hash of the preview pixels, for detecting "nothing changed since last poll". */
+	signature: string;
+	/** Distinct colors across the preview. */
+	colors: number;
+}
 
-		const onRequest = () => {
-			inFlight++;
-			clearTimeout(quietTimer);
-		};
+/**
+ * Screenshots the preview iframe.
+ *
+ * Captures via puppeteer rather than reading the canvas in-page, because
+ * MapLibre runs without `preserveDrawingBuffer` and drawImage/toDataURL would
+ * return an empty buffer. It screenshots the *iframe element* rather than the
+ * canvas inside it: puppeteer clips an element screenshot using coordinates
+ * from that element's own frame, so capturing the canvas — which lives in the
+ * iframe's coordinate space — silently returns the wrong region of the page.
+ *
+ * Returns undefined instead of throwing when the preview cannot be read yet;
+ * the component assigns srcdoc asynchronously, so a poll can land while the
+ * frame's execution context is being replaced.
+ */
+async function readPreview(page: Page): Promise<PreviewState | undefined> {
+	try {
+		const iframe = await page.$(IFRAME_SELECTOR);
+		const frame = await iframe?.contentFrame();
+		// evaluate() addresses the iframe's own document, so this lookup is sound.
+		const canvas = await frame?.$(CANVAS_SELECTOR);
+		if (!iframe || !canvas) return undefined;
 
-		const onSettled = () => {
-			inFlight = Math.max(0, inFlight - 1);
-			if (inFlight === 0) armQuietTimer();
-		};
+		const buffer = Buffer.from(await iframe.screenshot({ type: 'png' }));
+		const { data } = PNG.sync.read(buffer);
 
-		const hardTimer = setTimeout(() => finish(false), timeoutMs);
+		const colors = new Set<number>();
+		for (let i = 0; i < data.length; i += 4) {
+			colors.add((data[i] << 16) | (data[i + 1] << 8) | data[i + 2]);
+		}
 
-		page.on('request', onRequest);
-		page.on('requestfinished', onSettled);
-		page.on('requestfailed', onSettled);
+		return { signature: createHash('sha1').update(data).digest('hex'), colors: colors.size };
+	} catch {
+		// Frame swapped under us, or nothing has a box yet; retry next poll.
+		return undefined;
+	}
+}
 
-		// Nothing may be in flight already, in which case no event would ever fire.
-		armQuietTimer();
-	});
+export interface MapRenderedOptions {
+	pollMs?: number;
+	timeoutMs?: number;
+}
 
-	// Tiles arrive over the network but are rasterized a frame or two later.
-	await new Promise((resolve) => setTimeout(resolve, renderMs));
+/**
+ * Waits until the map has finished drawing, by requiring all of:
+ *
+ *  - no requests in flight, so no tile or style is still on its way;
+ *  - the preview is not one flat color;
+ *  - the preview is byte-identical across two consecutive idle polls.
+ *
+ * Network idle alone is not enough: it passes while the GPU still has frames to
+ * paint. Pixel stability alone is not enough either: rendering can stall
+ * waiting on a slow tile, which would capture a half-drawn map.
+ *
+ * Scope of the flat-color check: it catches a catastrophically blank preview
+ * (no WebGL, nothing drawn at all). It deliberately does not try to detect
+ * missing tiles — a map with markers or attribution still has hundreds of
+ * colors, so any threshold would be arbitrary. Failed or 404 tiles are caught
+ * by the request listeners in smoke.ts instead, which is where they belong.
+ *
+ * MapLibre's `idle` event would state this directly, but no example exposes its
+ * Map instance to the parent frame, so we observe the page instead.
+ *
+ * @returns true once rendered and settled, false if `timeoutMs` was hit first.
+ */
+export async function waitForMapRendered(
+	page: Page,
+	tracker: NetworkTracker,
+	{ pollMs = 400, timeoutMs = 30_000 }: MapRenderedOptions = {},
+): Promise<boolean> {
+	const deadline = Date.now() + timeoutMs;
+	let previous: string | undefined;
 
-	return settled;
+	while (Date.now() < deadline) {
+		await new Promise((resolve) => setTimeout(resolve, pollMs));
+
+		// Something is still loading; whatever is on screen now does not count.
+		if (tracker.inFlight > 0) {
+			previous = undefined;
+			continue;
+		}
+
+		const state = await readPreview(page);
+		if (!state) {
+			// Unreadable this round; an older signature must not count as stable.
+			previous = undefined;
+			continue;
+		}
+
+		if (state.colors > 1 && state.signature === previous) return true;
+		previous = state.signature;
+	}
+
+	return false;
 }
