@@ -6,13 +6,13 @@
 <h2><%= title %></h2>
 
 <% examples.forEach(example => { %>
-<div style="display:flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin:3em 0">
-	<div style="min-width: 300px; flex-grow: 1;">
-		<h3 style="margin:0; text-align: center"><a href="<%~ example.slug %>/" style="text-decoration:none"><%= example.title %></a></h3>
-		<p style="margin:0; text-align: center"><a href="<%~ example.slug %>/" style="text-decoration:none"><%= example.description %></a></p>
+<div class="vp-example">
+	<div class="vp-example-text">
+		<h3><a href="<%~ example.slug %>/"><%= example.title %></a></h3>
+		<p><a href="<%~ example.slug %>/"><%= example.description %></a></p>
 	</div>
-	<div style="flex-shrink: 0; flex-grow: 0;">
-		<a href="<%~ example.slug %>/" style="text-decoration:none">
+	<div class="vp-example-preview">
+		<a href="<%~ example.slug %>/">
 			<img src="<%~ example.slug %>/preview.png" alt="<%= example.title %>" width="320" height="180" />
 		</a>
 	</div>

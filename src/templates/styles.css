@@ -1,0 +1,35 @@
+/* Index page: title and description next to the preview image. */
+.vp-example {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	margin: 3em 0;
+}
+
+.vp-example-text {
+	flex-grow: 1;
+	min-width: 300px;
+}
+
+/* Both rules have to beat the page template's `h3 { text-align: left }` and
+   `main p { text-align: justify }`, so they target the elements themselves. */
+.vp-example-text h3,
+.vp-example-text p {
+	margin: 0;
+	text-align: center;
+}
+
+.vp-example a {
+	text-decoration: none;
+}
+
+.vp-example-preview {
+	flex: 0 0 auto;
+}
+
+/* Example page: the description below the headline. */
+.vp-subtitle {
+	text-align: center;
+}

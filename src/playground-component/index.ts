@@ -1,14 +1,5 @@
-import prismCss from 'prismjs/themes/prism-tomorrow.css';
-import vpCss from './styles.css';
 import Prism from 'prismjs';
 import { CodeJar } from 'codejar';
-
-const styleEl = document.createElement('style');
-// Strip Prism's `font-size: 1em` so docs-body code blocks inherit naturally
-// from the page; syntax-highlighting colors are left intact.
-const prismScrubbed = prismCss.replace(/\s*font-size:\s*1em;/g, '');
-styleEl.textContent = `${prismScrubbed}\n${vpCss}`;
-document.head.appendChild(styleEl);
 
 async function mount(root: HTMLElement) {
 	const snippetUrl = root.dataset.snippet ?? './code.html';

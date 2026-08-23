@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import * as esbuild from 'esbuild';
 import toc from '../playground/toc.ts';
 import { Eta } from 'eta';
@@ -40,6 +41,22 @@ function validateToc() {
 	}
 }
 
+/**
+ * Concatenates the syntax-highlighting theme and our own rules into a single
+ * stylesheet, so pages can link it instead of carrying the rules inline.
+ */
+function buildStylesheet() {
+	const read = (specifier: string) =>
+		fs.readFileSync(fileURLToPath(import.meta.resolve(specifier)), 'utf-8');
+
+	// Strip Prism's `font-size: 1em` so docs-body code blocks inherit naturally
+	// from the page; syntax-highlighting colors are left intact.
+	const prism = read('prismjs/themes/prism-tomorrow.css').replace(/\s*font-size:\s*1em;/g, '');
+
+	const css = [prism, read('./playground-component/styles.css'), read('./templates/styles.css')];
+	fs.writeFileSync('./docs/playground.css', css.join('\n'));
+}
+
 export default async function build() {
 	process.chdir(projectRoot);
 
@@ -54,10 +71,11 @@ export default async function build() {
 		format: 'esm',
 		outfile: './docs/playground.js',
 		target: 'es2022',
-		loader: { '.css': 'text' },
 		minify: true,
 		logLevel: 'warning',
 	});
+
+	buildStylesheet();
 
 	// fetch() only rejects on network failure, so an HTTP error would otherwise be
 	// baked into every generated page as if it were the template.
@@ -98,7 +116,9 @@ export default async function build() {
 		const page = new Page(template)
 			.setBaseUrl('https://versatiles.org/playground/')
 			.setGithubLink(`https://github.com/versatiles-org/playground/${githubUrl}`)
-			.setContent(content);
+			.setContent(content)
+			// appended last so these rules win over the ones the page template brings
+			.addHead(`<link rel="stylesheet" href="${example ? '../' : ''}playground.css">`);
 		if (example) {
 			page
 				.setTitle(`Versatiles Playground - ${example.title}`, example.description)
