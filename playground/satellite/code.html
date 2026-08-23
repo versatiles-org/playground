@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Load VersaTiles Style -->
+	<script src="https://tiles.versatiles.org/assets/lib/versatiles-style/versatiles-style.js"></script>
+	<!-- Load MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height:100vh"></div>
+
+	<!-- Initialize the map -->
+	<script type="module">
+		// generates a style with satellite imagery and labels on top
+		const style = await VersaTilesStyle.satellite();
+
+		// start the map with the generated VersaTiles style
+		new maplibregl.Map({
+			container: 'map',
+			style,
+			center: [2.295, 48.8738], // Arc de Triomphe, Paris
+			zoom: 15,
+		});
+	</script>
+</body>
+
+</html>

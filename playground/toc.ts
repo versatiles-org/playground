@@ -23,5 +23,11 @@ export default [
 		examples: [
 			'geocoder'
 		]
+	},
+	{
+		title: 'Other Data Sources',
+		examples: [
+			'satellite'
+		]
 	}
 ] as const satisfies TOC;
