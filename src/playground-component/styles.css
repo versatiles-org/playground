@@ -50,6 +50,10 @@
 	}
 
 	.vp-label {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
 		padding: 0.5rem 0.75rem;
 		font-size: 0.7rem;
 		letter-spacing: 0.05em;
@@ -57,6 +61,23 @@
 		color: var(--vp-muted);
 		background: #1a1a28;
 		border-bottom: 1px solid var(--vp-border);
+	}
+
+	.vp-run {
+		padding: 0.1rem 0.7rem;
+		border: 1px solid var(--vp-border);
+		border-radius: 5px;
+		background: var(--vp-bg);
+		color: var(--vp-accent);
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		cursor: pointer;
+
+		&:hover,
+		&:focus-visible {
+			border-color: var(--vp-accent);
+		}
 	}
 
 	.vp-preview-wrap {

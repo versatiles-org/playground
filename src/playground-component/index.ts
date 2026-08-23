@@ -18,13 +18,14 @@ async function mount(root: HTMLElement) {
 			</div>
 		</div>
 		<div class="vp-pane vp-pane-code">
-			<div class="vp-label">code.html</div>
+			<div class="vp-label">code.html<button class="vp-run" type="button">Run</button></div>
 			<code class="vp-editor language-markup" spellcheck="false"></code>
 		</div>
 	`;
 
 	const editorEl = root.querySelector<HTMLElement>('.vp-editor')!;
 	const iframe = root.querySelector<HTMLIFrameElement>('iframe.vp-preview')!;
+	const runButton = root.querySelector<HTMLButtonElement>('.vp-run')!;
 
 	const jar = CodeJar(editorEl, (el) => Prism.highlightElement(el), {
 		tab: '\t',
@@ -32,12 +33,16 @@ async function mount(root: HTMLElement) {
 	});
 	jar.updateCode(snippet);
 
+	let debounceId: ReturnType<typeof setTimeout> | undefined;
+
 	const run = () => {
+		// A pending auto-run would otherwise fire again right after this one.
+		clearTimeout(debounceId);
 		iframe.srcdoc = withDefaultStyle(editorEl.textContent ?? '');
 	};
 	run();
 
-	let debounceId: ReturnType<typeof setTimeout> | undefined;
+	runButton.addEventListener('click', run);
 	editorEl.addEventListener('input', () => {
 		clearTimeout(debounceId);
 		debounceId = setTimeout(run, 1000);
