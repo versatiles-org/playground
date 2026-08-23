@@ -6,13 +6,11 @@ import type { ExampleCheck } from '../../src/lib/check.ts';
  * part of the example that no amount of rendering can prove: that our geocoding
  * service still answers in the shape the plugin expects.
  *
- * The query is submitted with Enter — the plugin only searches while typing when
- * `showResultsWhileTyping` is set, which this example leaves at its default.
+ * Typing is enough to trigger it, because the example sets
+ * `showResultsWhileTyping` — without that option the plugin waits for Enter.
  */
 const check: ExampleCheck = async ({ preview }) => {
 	await preview.type('input.maplibregl-ctrl-geocoder--input', 'Bremen');
-	await preview.focus('input.maplibregl-ctrl-geocoder--input');
-	await preview.page().keyboard.press('Enter');
 
 	await preview.waitForSelector('.suggestions li');
 	const suggestions = await preview.$$eval('.suggestions li', (items) =>

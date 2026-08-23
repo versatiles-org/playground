@@ -22,9 +22,10 @@ Photon returns plain GeoJSON without these fields, so the example walks each fea
 
 If you swap Photon for another backend — or run your own Photon instance and just point at a different URL — this adapter is the only piece you'd need to adjust.
 
-### `marker: false`
+### Options
 
-By default the plugin drops its own marker on each result. We pass `marker: false` so nothing is placed automatically; your code can render a custom marker (or none) if it wants to.
+- **`marker: false`** — by default the plugin drops its own marker on each result. With it switched off nothing is placed automatically, and your code can render a custom marker (or none) if it wants to.
+- **`showResultsWhileTyping: true`** — search as the user types, rather than only when they press <kbd>Enter</kbd>. The plugin defaults to the latter, which feels broken to anyone used to a modern search box. Each keystroke costs a request to the geocoder, though — the plugin waits `debounceSearch` milliseconds (200 by default) before asking.
 
 ### Self-hosting the Photon backend
 
