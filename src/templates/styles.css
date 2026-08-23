@@ -8,8 +8,11 @@
 	margin: 3em 0;
 }
 
+/* `flex-basis: 0` keeps the text column out of the size calculation, so a long
+   description wraps inside the space that is left instead of widening the column
+   and pushing the preview onto its own line. */
 .vp-example-text {
-	flex-grow: 1;
+	flex: 1 1 0;
 	min-width: 300px;
 }
 
