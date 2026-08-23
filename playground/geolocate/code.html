@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Load MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height:100vh"></div>
+
+	<!-- Initialize the map -->
+	<script>
+		// add the MapLibre GL RTL text plugin for proper rendering of right-to-left languages
+		maplibregl.setRTLTextPlugin('https://tiles.versatiles.org/assets/lib/mapbox-gl-rtl-text/mapbox-gl-rtl-text.js', true);
+
+		const map = new maplibregl.Map({
+			container: 'map',
+			style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
+			center: [10, 45],
+			zoom: 2,
+		});
+
+		// The "find me" button, top right: asks the browser where the user is
+		map.addControl(
+			new maplibregl.GeolocateControl({
+				positionOptions: { enableHighAccuracy: true }, // use GPS if the device has one
+				trackUserLocation: true, // keep following once located
+			}),
+		);
+	</script>
+</body>
+
+</html>

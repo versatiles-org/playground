@@ -23,7 +23,8 @@ export default [
 	{
 		title: 'Adding UI Controls',
 		examples: [
-			'geocoder'
+			'geocoder',
+			'geolocate'
 		]
 	},
 	{
