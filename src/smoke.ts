@@ -1,7 +1,7 @@
 import toc from '../playground/toc.ts';
 import server, { url } from './dev.ts';
 import { trackNetwork, waitForMapRendered } from './lib/browser.ts';
-import puppeteer, { type Browser } from 'puppeteer';
+import puppeteer, { type Browser, type HTTPRequest } from 'puppeteer';
 
 /**
  * Smoke-tests every example: loads its page, waits for the map to finish
@@ -29,7 +29,14 @@ async function checkExample(browser: Browser, slug: string): Promise<string[]> {
 	page.on('console', (msg) => {
 		if (msg.type() === 'error') problems.push(`console error: ${msg.text()}`);
 	});
+	// The page *around* the example — the site's stylesheet, its logo, the GitHub
+	// icon — is not the example's doing, and an outage there has already turned CI
+	// red for a decorative image. Anything the preview loads still counts, including
+	// MapLibre's tile requests: those come from a worker and have no frame at all.
+	const fromPageShell = (req: HTTPRequest) => req.frame() === page.mainFrame();
+
 	page.on('requestfailed', (req) => {
+		if (fromPageShell(req)) return;
 		const reason = req.failure()?.errorText ?? 'unknown';
 		// MapLibre cancels tile requests as soon as a tile is no longer needed, which
 		// happens routinely while terrain is loading: the elevation data changes which
@@ -39,6 +46,7 @@ async function checkExample(browser: Browser, slug: string): Promise<string[]> {
 	});
 	// A 404 is a *successful* request, so requestfailed never sees it.
 	page.on('response', (res) => {
+		if (fromPageShell(res.request())) return;
 		if (res.status() >= 400) problems.push(`HTTP ${res.status()}: ${res.url()}`);
 	});
 
