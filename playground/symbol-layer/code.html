@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Load MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height:100vh"></div>
+
+	<!-- Initialize the map -->
+	<script type="module">
+		const map = new maplibregl.Map({
+			container: 'map',
+			style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
+			bounds: [4.5, 52.3, 5.45, 52.9], // North Holland
+		});
+
+		// Windmills and lighthouses, extracted from OpenStreetMap
+		const response = await fetch('./data.geojson'); // served next to this page
+		const geojson = await response.json();
+
+		// Sources and layers can only be added once the style has loaded
+		await map.once('load');
+
+		map.addSource('landmarks', {
+			type: 'geojson',
+			data: geojson,
+			attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		});
+
+		// One symbol layer draws an icon and a label for every point
+		map.addLayer({
+			id: 'landmarks',
+			type: 'symbol',
+			source: 'landmarks',
+			layout: {
+				// "basics" is the sprite id used by our styles, "icon-windmill" the image in it
+				'icon-image': ['concat', 'basics:icon-', ['get', 'kind']],
+				'text-field': ['get', 'name'],
+				'text-font': ['noto_sans_regular'], // must exist on the glyph server
+				'text-size': 12,
+				'text-anchor': 'top', // put the label below ...
+				'text-offset': [0, 0.8], // ... and clear of the icon
+			},
+			paint: {
+				'text-halo-color': '#fff', // keep labels readable over any background
+				'text-halo-width': 1,
+			},
+		});
+	</script>
+</body>
+
+</html>

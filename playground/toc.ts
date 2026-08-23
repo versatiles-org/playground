@@ -15,7 +15,8 @@ export default [
 		title: 'Adding Features',
 		examples: [
 			'add-marker',
-			'add-geojson'
+			'add-geojson',
+			'symbol-layer'
 		]
 	},
 	{
