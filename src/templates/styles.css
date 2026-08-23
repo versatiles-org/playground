@@ -17,11 +17,14 @@
 }
 
 /* Both rules have to beat the page template's `h3 { text-align: left }` and
-   `main p { text-align: justify }`, so they target the elements themselves. */
+   `main p { text-align: justify }`, so they target the elements themselves.
+   `text-wrap: balance` spreads a wrapped title or description evenly over its
+   lines, instead of leaving a single word on the last one. */
 .vp-example-text h3,
 .vp-example-text p {
 	margin: 0;
 	text-align: center;
+	text-wrap: balance;
 }
 
 .vp-example a {
