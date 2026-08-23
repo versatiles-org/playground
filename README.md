@@ -54,15 +54,17 @@ To start a local development server:
 npm run dev
 ```
 
-### Test the Examples
-
-To check that every example still runs:
+### Run the Tests
 
 ```bash
-npm run test
+npm run test            # both suites
+npm run test:component  # the live editor
+npm run test:examples   # every example
 ```
 
-This loads each example in a headless browser and fails if the browser reported an error, an asset failed to load, or the map never painted. It does not compare pixels — tiles come from the live network, so exact colors are not reproducible.
+`test:component` drives the editor in a headless browser — that the code shows up, that **Run** and its keyboard shortcut re-render the preview, and that typing alone does not.
+
+`test:examples` loads each example in a headless browser and fails if the browser reported an error, an asset failed to load, or the map never painted. It does not compare pixels — tiles come from the live network, so exact colors are not reproducible.
 
 For the same reason a failing example is run a second time before the test gives up: a single failure is as likely to be a hiccup on the network as a broken example. One that passes on the retry is reported as `(passed on retry)`, with the first attempt's output kept — a flake that keeps coming back is worth noticing.
 
@@ -96,7 +98,7 @@ To add a new example to the playground:
 
    - Create a `code.html` file with a self-contained HTML snippet (DOCTYPE + scripts + map setup).
    - Create a `text.md` file with a markdown explanation. The YAML front matter must include `title` and `description`.
-   - Optionally create a `check.ts` file to test an interaction the example is about (see [Test the Examples](#test-the-examples)).
+   - Optionally create a `check.ts` file to test an interaction the example is about (see [Run the Tests](#run-the-tests)).
 
 3. **Register the Example:**
 

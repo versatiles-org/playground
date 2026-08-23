@@ -19,7 +19,9 @@
 		"lint": "eslint .",
 		"typecheck": "tsc --noEmit",
 		"screenshots": "tsx src/screenshots.ts",
-		"test": "tsx src/smoke.ts",
+		"test": "npm run test:component && npm run test:examples",
+		"test:component": "tsx --test \"src/**/*.test.ts\"",
+		"test:examples": "tsx src/smoke.ts",
 		"upgrade": "npm-check-updates -u && npm install"
 	},
 	"dependencies": {
