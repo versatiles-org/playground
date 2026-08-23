@@ -64,6 +64,8 @@ npm run test
 
 This loads each example in a headless browser and fails if the browser reported an error, an asset failed to load, or the map never painted. It does not compare pixels — tiles come from the live network, so exact colors are not reproducible.
 
+For the same reason a failing example is run a second time before the test gives up: a single failure is as likely to be a hiccup on the network as a broken example. One that passes on the retry is reported as `(passed on retry)`, with the first attempt's output kept — a flake that keeps coming back is worth noticing.
+
 Rendering alone says nothing about what a visitor *does* with an example, so an example built around an interaction can add an optional `check.ts` next to its `code.html`:
 
 ```ts

@@ -17,6 +17,7 @@ import puppeteer, { type Browser, type HTTPRequest, type Page } from 'puppeteer'
  */
 
 const TIMEOUT = 30_000;
+const RETRY_DELAY = 2_000;
 
 function describe(err: unknown): string {
 	return err instanceof Error ? err.message : String(err);
@@ -106,6 +107,29 @@ async function checkExample(browser: Browser, slug: string): Promise<string[]> {
 	return problems;
 }
 
+/**
+ * Runs an example, and on failure runs it once more.
+ *
+ * Every example pulls its libraries, styles and tiles from the live network, so a
+ * lone failure is as likely to be a hiccup on the way as a broken example — and
+ * the nightly run has nobody watching to tell the two apart. A failure that
+ * survives a second attempt is not a hiccup.
+ *
+ * @returns the surviving problems, plus whatever only the first attempt saw.
+ */
+async function checkExampleTwice(
+	browser: Browser,
+	slug: string,
+): Promise<{ problems: string[]; flaked: string[] }> {
+	const first = await checkExample(browser, slug);
+	if (first.length === 0) return { problems: [], flaked: [] };
+
+	// Retrying a struggling server in the same instant tends to reproduce its bad day.
+	await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
+
+	return { problems: await checkExample(browser, slug), flaked: first };
+}
+
 const browser = await puppeteer.launch({
 	headless: true,
 	defaultViewport: { width: 1200, height: 800, deviceScaleFactor: 1 },
@@ -115,9 +139,12 @@ let failed = false;
 try {
 	for (const group of toc) {
 		for (const slug of group.examples) {
-			const problems = await checkExample(browser, slug);
+			const { problems, flaked } = await checkExampleTwice(browser, slug);
 			if (problems.length === 0) {
-				console.log(`✅ ${slug}`);
+				console.log(`✅ ${slug}${flaked.length > 0 ? ' (passed on retry)' : ''}`);
+				// Printed even though the example passed: a flake that keeps coming
+				// back is worth seeing before it becomes a failure.
+				for (const problem of flaked) console.log(`     first attempt: ${problem}`);
 			} else {
 				failed = true;
 				console.log(`❌ ${slug}`);
