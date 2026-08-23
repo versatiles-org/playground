@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Load MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height:100vh"></div>
+
+	<!-- Initialize the map -->
+	<script type="module">
+		const map = new maplibregl.Map({
+			container: 'map',
+			style: 'https://tiles.versatiles.org/assets/styles/colorful/style.json',
+			bounds: [5.8, 47.2, 15.1, 55.1], // Germany
+		});
+
+		// Federal states with their population and density, from Eurostat
+		const response = await fetch('./data.geojson');
+		const geojson = await response.json();
+
+		// Sources and layers can only be added once the style has loaded
+		await map.once('load');
+
+		map.addSource('states', {
+			type: 'geojson',
+			data: geojson,
+			attribution: '© EuroGeographics, Eurostat',
+		});
+
+		// draw both layers below the style's labels, so place names stay readable
+		const firstLabelLayer = map.getStyle().layers.find((layer) => layer.type === 'symbol').id;
+
+		map.addLayer(
+			{
+				id: 'states_fill',
+				type: 'fill',
+				source: 'states',
+				paint: {
+					// six density classes, one hue from light to dark
+					'fill-color': [
+						'step',
+						['get', 'density'],
+						'#b7d3f6', 100,
+						'#86b6ef', 200,
+						'#5598e7', 300,
+						'#2a78d6', 500,
+						'#1c5cab', 1500,
+						'#104281',
+					],
+					'fill-opacity': 0.7,
+				},
+			},
+			firstLabelLayer,
+		);
+
+		// A second layer on the same source separates neighbouring classes
+		map.addLayer(
+			{
+				id: 'states_outline',
+				type: 'line',
+				source: 'states',
+				paint: {
+					'line-color': '#fff',
+					'line-width': 1.5,
+				},
+			},
+			firstLabelLayer,
+		);
+
+		// Layer-bound click events only fire for features of that layer
+		map.on('click', 'states_fill', (event) => {
+			const { name, population, density } = event.features[0].properties;
+			new maplibregl.Popup()
+				.setLngLat(event.lngLat)
+				.setHTML(`<strong>${name}</strong><br>${population.toLocaleString()} inhabitants<br>${density} per km²`)
+				.addTo(map);
+		});
+
+		// Show that the states are clickable
+		map.on('mouseenter', 'states_fill', () => (map.getCanvas().style.cursor = 'pointer'));
+		map.on('mouseleave', 'states_fill', () => (map.getCanvas().style.cursor = ''));
+	</script>
+</body>
+
+</html>
