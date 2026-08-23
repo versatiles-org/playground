@@ -18,7 +18,7 @@ async function mount(root: HTMLElement) {
 			</div>
 		</div>
 		<div class="vp-pane vp-pane-code">
-			<div class="vp-label">code.html<button class="vp-run" type="button">Run</button></div>
+			<div class="vp-label">code.html<button class="vp-run" type="button">Run<kbd class="vp-key"></kbd></button></div>
 			<code class="vp-editor language-markup" spellcheck="false"></code>
 		</div>
 	`;
@@ -33,20 +33,31 @@ async function mount(root: HTMLElement) {
 	});
 	jar.updateCode(snippet);
 
-	let debounceId: ReturnType<typeof setTimeout> | undefined;
-
 	const run = () => {
-		// A pending auto-run would otherwise fire again right after this one.
-		clearTimeout(debounceId);
 		iframe.srcdoc = withDefaultStyle(editorEl.textContent ?? '');
 	};
 	run();
 
+	const isApple = /Mac|iPhone|iPad/.test(navigator.userAgent);
+	root.querySelector<HTMLElement>('.vp-key')!.textContent = isApple
+		? '\u2318\u21A9'
+		: 'Ctrl+\u21A9';
+
 	runButton.addEventListener('click', run);
-	editorEl.addEventListener('input', () => {
-		clearTimeout(debounceId);
-		debounceId = setTimeout(run, 1000);
-	});
+
+	// Capture on the root, because CodeJar indents on Enter: its listener sits on the
+	// editor itself, where capture and bubble both run in registration order — so only
+	// an ancestor is guaranteed to see the key first.
+	root.addEventListener(
+		'keydown',
+		(event) => {
+			if (event.key !== 'Enter' || !(event.ctrlKey || event.metaKey)) return;
+			event.preventDefault();
+			event.stopPropagation();
+			run();
+		},
+		true,
+	);
 }
 
 function withDefaultStyle(html: string): string {

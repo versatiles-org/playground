@@ -78,6 +78,12 @@
 		&:focus-visible {
 			border-color: var(--vp-accent);
 		}
+
+		.vp-key {
+			margin-left: 0.5em;
+			color: var(--vp-muted);
+			font: inherit;
+		}
 	}
 
 	.vp-preview-wrap {

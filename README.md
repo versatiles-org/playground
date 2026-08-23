@@ -4,7 +4,9 @@
 
 A web-based playground demonstrating how to use [VersaTiles](https://versatiles.org) in a frontend environment.
 
-Each example is a self-contained HTML snippet rendered in a small in-house live editor (preview on top, syntax-highlighted code editor below). The site is built statically and automatically deployed via GitHub Pages:
+Each example is a self-contained HTML snippet rendered in a small in-house live editor (preview on top, syntax-highlighted code editor below). The code is editable: press **Run** — or <kbd>Ctrl</kbd>+<kbd>Enter</kbd>, <kbd>⌘</kbd>+<kbd>Enter</kbd> on a Mac — to render your changes. Nothing is stored, so reloading the page brings back the original snippet.
+
+The site is built statically and automatically deployed via GitHub Pages:
 
 👉 https://versatiles.org/playground/
 
