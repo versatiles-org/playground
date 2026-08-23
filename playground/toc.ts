@@ -30,7 +30,8 @@ export default [
 	{
 		title: 'Other Data Sources',
 		examples: [
-			'satellite'
+			'satellite',
+			'terrain'
 		]
 	}
 ] as const satisfies TOC;

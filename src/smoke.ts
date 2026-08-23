@@ -31,6 +31,10 @@ async function checkExample(browser: Browser, slug: string): Promise<string[]> {
 	});
 	page.on('requestfailed', (req) => {
 		const reason = req.failure()?.errorText ?? 'unknown';
+		// MapLibre cancels tile requests as soon as a tile is no longer needed, which
+		// happens routinely while terrain is loading: the elevation data changes which
+		// tiles are visible. Those aborts are the map working, not the example failing.
+		if (reason === 'net::ERR_ABORTED') return;
 		problems.push(`request failed: ${req.url()} (${reason})`);
 	});
 	// A 404 is a *successful* request, so requestfailed never sees it.

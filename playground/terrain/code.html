@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Load VersaTiles Style -->
+	<script src="https://tiles.versatiles.org/assets/lib/versatiles-style/versatiles-style.js"></script>
+	<!-- Load MapLibre GL JS -->
+	<script src="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.js"></script>
+	<link href="https://tiles.versatiles.org/assets/lib/maplibre-gl/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<body>
+	<!-- Define the map container -->
+	<div id="map" style="height:100vh"></div>
+
+	<!-- Initialize the map -->
+	<script type="module">
+		// both options need our elevation tiles, so the style is built asynchronously
+		const style = await VersaTilesStyle.colorful({
+			baseUrl: 'https://tiles.versatiles.org', // base URL for tiles, sprites and fonts
+			terrain: { exaggeration: 1.5 }, // lift the map into the third dimension
+			hillshade: true, // shade the slopes, so the relief is visible from above too
+		});
+
+		// the generated style is a plain object: nothing is drawn above the horizon,
+		// so the map needs a sky of its own
+		style.sky = {
+			'sky-color': '#8bb7e0',
+			'horizon-color': '#dfeaf2',
+			'fog-color': '#dfeaf2',
+			'fog-ground-blend': 0.4,
+		};
+
+		new maplibregl.Map({
+			container: 'map',
+			style,
+			center: [7.6586, 45.9763], // Matterhorn
+			zoom: 12.2,
+			pitch: 75, // tilt the camera towards the horizon
+			bearing: 215, // look south-west, the classic view from Zermatt
+			maxPitch: 85, // MapLibre stops tilting at 60° by default
+		});
+	</script>
+</body>
+
+</html>
