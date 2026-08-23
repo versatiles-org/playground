@@ -114,7 +114,7 @@ To add a new example to the playground:
 
    Improve your `code.html` and `text.md` files to refine your example and documentation.
 
-Screenshots are automatically generated during [deployment](https://github.com/versatiles-org/playground/blob/main/.github/workflows/gh-release.yml), so committing `code.html` + `text.md` is enough. You can test screenshots locally with `npm run screenshots` — without it, the index page shows broken thumbnails for new examples.
+Screenshots are automatically generated during [deployment](https://github.com/versatiles-org/playground/blob/main/.github/workflows/ci.yml), so committing `code.html` + `text.md` is enough. You can test screenshots locally with `npm run screenshots` — without it, the index page shows broken thumbnails for new examples.
 
 ---
 

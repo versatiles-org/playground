@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  # The examples load MapLibre, styles and tiles from tiles.versatiles.org at
+  # unversioned paths, so an upstream update can break the published playground
+  # with no commit here. A daily run catches that instead of waiting for a push.
+  schedule:
+    - cron: "23 5 * * *"
+  workflow_dispatch:
+  repository_dispatch:
+
+permissions:
+  contents: read
+
+# One run per ref. A pull request run is superseded by the next push to it, but a
+# run that may publish is never cancelled: Pages has a single deploy target, and
+# aborting mid-deploy could leave the published site half-updated. Those queue up
+# instead and collapse to the latest.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # Everything but a pull request and the nightly check publishes the site. Pushes
+  # only reach this workflow from main, see the trigger above.
+  PUBLISH: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' }}
+
+jobs:
+  build:
+    name: Check, test and build
+    # Puppeteer's Chrome cannot launch on ubuntu-latest: Ubuntu 24.04 blocks
+    # unprivileged user namespaces via AppArmor, so Chrome finds "no usable sandbox".
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test component
+        run: npm run test:component
+        
+      - name: Test examples
+        run: npm run test:examples
+
+      # Screenshots first: the build copies the preview images it writes.
+      - name: Build screenshots
+        if: env.PUBLISH == 'true'
+        run: npm run screenshots
+
+      - name: Build pages
+        if: env.PUBLISH == 'true'
+        run: npm run build
+
+      - name: Upload static files as artifact
+        if: env.PUBLISH == 'true'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs/
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    # Repeated rather than shared with PUBLISH above: the env context is not
+    # available in a job-level condition.
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch'
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
