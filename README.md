@@ -99,6 +99,7 @@ To add a new example to the playground:
    - Create a `code.html` file with a self-contained HTML snippet (DOCTYPE + scripts + map setup).
    - Create a `text.md` file with a markdown explanation. The YAML front matter must include `title` and `description`.
    - Optionally create a `check.ts` file to test an interaction the example is about (see [Run the Tests](#run-the-tests)).
+   - Data the example loads (e.g. `data.geojson`) belongs in the same folder, and is fetched by its deployed URL — `https://versatiles.org/playground/$name/$file` — so the snippet keeps working when someone copies it elsewhere. The build fails if that file is missing or belongs to another example.
 
 3. **Register the Example:**
 

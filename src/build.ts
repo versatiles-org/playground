@@ -57,10 +57,38 @@ function buildStylesheet() {
 	fs.writeFileSync('./docs/playground.css', css.join('\n'));
 }
 
+/**
+ * Examples fetch their own data from the deployed site, e.g.
+ * `https://versatiles.org/playground/choropleth/data.geojson`. Nothing ties that URL
+ * to the file in the repository, so a typo — or a slug left behind by copy-paste —
+ * stays invisible until the page 404s after the next deployment.
+ */
+function validateDataUrls() {
+	const dataUrl = /https:\/\/versatiles\.org\/playground\/([\w-]+)\/([\w.-]+)/g;
+
+	for (const slug of toc.flatMap((group) => group.examples as readonly string[])) {
+		const code = fs.readFileSync(`./playground/${slug}/code.html`, 'utf-8');
+
+		for (const [url, referencedSlug, file] of code.matchAll(dataUrl)) {
+			if (referencedSlug !== slug) {
+				throw new Error(
+					`playground/${slug}/code.html requests ${url}, which belongs to "${referencedSlug}"`,
+				);
+			}
+			if (!fs.existsSync(`./playground/${slug}/${file}`)) {
+				throw new Error(
+					`playground/${slug}/code.html requests ${url}, but playground/${slug}/${file} does not exist`,
+				);
+			}
+		}
+	}
+}
+
 export default async function build() {
 	process.chdir(projectRoot);
 
 	validateToc();
+	validateDataUrls();
 
 	fs.rmSync('./docs', { recursive: true, force: true });
 	fs.mkdirSync('./docs', { recursive: true });
