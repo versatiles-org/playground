@@ -1,6 +1,6 @@
 ---
 title: Clickable Choropleth
-description: How to color areas by a value and react to clicks.
+description: How to color areas by a value and show the figures on click.
 ---
 
 A *choropleth* colors areas by a number: here the 16 German federal states, shaded by how many people live per square kilometre. The boundaries come from [Eurostat's GISCO service](https://ec.europa.eu/eurostat/web/gisco), the population figures from [Eurostat](https://ec.europa.eu/eurostat), and each feature carries three properties — `name`, `population` and `density`.
@@ -23,7 +23,7 @@ A `fill` layer with a fixed `fill-color` would paint every state the same. Inste
 
 [`step`](https://maplibre.org/maplibre-style-spec/expressions/#step) sorts values into classes: a first color, then pairs of *threshold, color*. Its sibling [`interpolate`](https://maplibre.org/maplibre-style-spec/expressions/#interpolate) blends continuously between stops instead — useful when the exact value matters more than the class.
 
-A second layer on the same source draws the borders in white — as in [Add GeoJSON](../add-geojson/), one source feeds a `fill` and a `line` layer. Without it, neighbouring states from the same class merge into one blob.
+A second layer on the same source draws the borders in white — as in [GeoJSON Overlay](../add-geojson/), one source feeds a `fill` and a `line` layer. Without it, neighbouring states from the same class merge into one blob.
 
 Two rules make the result readable: stay within **one hue from light to dark** (a rainbow suggests categories where there is a scale), and **normalise the number** — coloring by raw population would just redraw the map of big states.
 

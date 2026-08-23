@@ -1,6 +1,6 @@
 ---
-title: Basic OSM Map
-description: How to add a simple OSM map.
+title: Basic Map
+description: How to load MapLibre GL JS and show an OpenStreetMap basemap.
 ---
 
 [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) loads and renders map tiles in the browser. To use MapLibre, you need to load its JavaScript and CSS files.

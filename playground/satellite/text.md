@@ -1,6 +1,6 @@
 ---
 title: Satellite Imagery
-description: How to show satellite imagery on a map.
+description: How to show satellite imagery with the map's labels on top.
 ---
 
 Everything on a VersaTiles basemap is drawn from *vector* tiles: the browser receives geometries and attributes and renders them according to the style. Satellite imagery cannot work that way — it is photography, so it arrives as ready-made images. In [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) those are handled by a [`raster` source](https://maplibre.org/maplibre-style-spec/sources/#raster) and drawn by a [`raster` layer](https://maplibre.org/maplibre-style-spec/layers/#raster).

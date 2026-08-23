@@ -1,6 +1,6 @@
 ---
 title: 3D Terrain
-description: How to render a map in three dimensions.
+description: How to render elevation data as 3D terrain and hillshading.
 ---
 
 Elevation data reaches the browser the same way [satellite imagery](../satellite/) does: as image tiles. But these images are not meant to be looked at — the height of each pixel is encoded in its red, green and blue channels. A [`raster-dem`](https://maplibre.org/maplibre-style-spec/sources/#raster-dem) source tells [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) to read the pixels as numbers instead of colors, and the style's `terrain` property then lifts the whole map onto that surface.

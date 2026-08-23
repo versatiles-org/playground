@@ -1,6 +1,6 @@
 ---
 title: Geolocate Control
-description: How to add a "find me" button to the map.
+description: How to move the map to the visitor's own position.
 ---
 
 Unlike the [address search](../geocoder/), locating the user needs no plugin and no server: browsers ship a [Geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API), and [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) wraps it in a ready-made control.

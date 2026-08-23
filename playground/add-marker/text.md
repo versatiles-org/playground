@@ -1,6 +1,6 @@
 ---
-title: Add Marker
-description: How to place a basic marker on a map.
+title: Marker and Popup
+description: How to pin a coordinate and open a popup when it is clicked.
 ---
 
 A [`Marker`](https://maplibre.org/maplibre-gl-js/docs/API/classes/Marker/) is a DOM element placed at a geographic coordinate. As you pan or zoom the map, MapLibre keeps the marker anchored at its real-world position.

@@ -1,6 +1,6 @@
 ---
-title: Basic Style
-description: How to style a simple OSM map.
+title: Map Style
+description: How to generate a style with versatiles-style and adjust its colors and labels.
 ---
 
 [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) uses `style` objects to define the appearance of a map. These objects describe data sources, layers, colors, fonts, symbols, etc. (If you want to fine-tune a map down to individual layers, see the complete [MapLibre Style Spec](https://maplibre.org/maplibre-style-spec/).)

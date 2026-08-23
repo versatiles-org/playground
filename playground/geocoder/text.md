@@ -1,6 +1,6 @@
 ---
-title: Geocoder Plugin Example
-description: Add address search to the map.
+title: Address Search
+description: How to search for addresses and fly the map to the result.
 ---
 
 This example turns a [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/) basemap into a searchable map using the [`maplibre-gl-geocoder`](https://maplibre.org/maplibre-gl-geocoder/) plugin and a [Photon](https://github.com/komoot/photon) geocoding backend that we host at `https://geocode.versatiles.org`.

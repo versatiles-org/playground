@@ -1,6 +1,6 @@
 ---
-title: Add GeoJSON
-description: How to add GeoJSON data to a map.
+title: GeoJSON Overlay
+description: How to draw your own polygons and lines from a GeoJSON file.
 ---
 
 This example loads the boundary of the [Val Suzon](https://en.wikipedia.org/wiki/Val_Suzon) nature reserve in Burgundy, France, and renders it on the map.

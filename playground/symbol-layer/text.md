@@ -1,9 +1,9 @@
 ---
 title: Symbol Layer
-description: How to draw many symbols and labels.
+description: How to draw hundreds of points as icons with labels.
 ---
 
-[Add Marker](../add-marker/) places a `Marker` — an HTML element — on the map. That is convenient for a handful of points, but every marker is a DOM node the browser has to position on each frame, and markers know nothing about each other, so they happily overlap.
+[Marker and Popup](../add-marker/) places a `Marker` — an HTML element — on the map. That is convenient for a handful of points, but every marker is a DOM node the browser has to position on each frame, and markers know nothing about each other, so they happily overlap.
 
 A `symbol` layer is the other approach: the points live in a source, MapLibre renders them together with the rest of the map, and one layer can carry thousands of them. This example draws 170 windmills and lighthouses from [OpenStreetMap](https://www.openstreetmap.org/).
 
