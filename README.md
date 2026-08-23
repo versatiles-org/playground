@@ -64,6 +64,22 @@ npm run test
 
 This loads each example in a headless browser and fails if the browser reported an error, an asset failed to load, or the map never painted. It does not compare pixels — tiles come from the live network, so exact colors are not reproducible.
 
+Rendering alone says nothing about what a visitor *does* with an example, so an example built around an interaction can add an optional `check.ts` next to its `code.html`:
+
+```ts
+import * as assert from 'node:assert/strict';
+import type { ExampleCheck } from '../../src/lib/check.ts';
+
+const check: ExampleCheck = async ({ page, preview }) => {
+	await preview.click('.maplibregl-marker');
+	await preview.waitForSelector('.maplibregl-popup-content');
+};
+
+export default check;
+```
+
+`preview` is the frame the example runs in, `page` the surrounding playground page (for browser-level setup such as permissions). The smoke test runs the check once the map has finished rendering and treats anything thrown — an assertion, a selector that never appears — as a broken example.
+
 ---
 
 ## 🧸 Adding a New Example
@@ -78,6 +94,7 @@ To add a new example to the playground:
 
    - Create a `code.html` file with a self-contained HTML snippet (DOCTYPE + scripts + map setup).
    - Create a `text.md` file with a markdown explanation. The YAML front matter must include `title` and `description`.
+   - Optionally create a `check.ts` file to test an interaction the example is about (see [Test the Examples](#test-the-examples)).
 
 3. **Register the Example:**
 

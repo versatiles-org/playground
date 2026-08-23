@@ -12,5 +12,5 @@
 		"resolveJsonModule": true,
 		"types": ["node"]
 	},
-	"include": ["src/**/*", "playground/toc.ts"]
+	"include": ["src/**/*", "playground/**/*.ts"]
 }

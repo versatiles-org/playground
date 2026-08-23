@@ -1,9 +1,17 @@
 import { createHash } from 'node:crypto';
 import { PNG } from 'pngjs';
-import type { Page } from 'puppeteer';
+import type { Frame, Page } from 'puppeteer';
 
 const IFRAME_SELECTOR = '.vp-playground iframe.vp-preview';
 const CANVAS_SELECTOR = '.maplibregl-canvas';
+
+/** The document the example runs in. Throws if the preview is not mounted yet. */
+export async function previewFrame(page: Page): Promise<Frame> {
+	const iframe = await page.$(IFRAME_SELECTOR);
+	const frame = await iframe?.contentFrame();
+	if (!frame) throw new Error('preview iframe not found');
+	return frame;
+}
 
 export interface NetworkTracker {
 	/** Number of requests currently in flight. */

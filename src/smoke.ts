@@ -1,7 +1,11 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import toc from '../playground/toc.ts';
 import server, { url } from './dev.ts';
-import { trackNetwork, waitForMapRendered } from './lib/browser.ts';
-import puppeteer, { type Browser, type HTTPRequest } from 'puppeteer';
+import { previewFrame, trackNetwork, waitForMapRendered } from './lib/browser.ts';
+import type { ExampleCheck } from './lib/check.ts';
+import puppeteer, { type Browser, type HTTPRequest, type Page } from 'puppeteer';
 
 /**
  * Smoke-tests every example: loads its page, waits for the map to finish
@@ -16,6 +20,39 @@ const TIMEOUT = 30_000;
 
 function describe(err: unknown): string {
 	return err instanceof Error ? err.message : String(err);
+}
+
+/**
+ * Runs `playground/$slug/check.ts`, if the example has one. A hanging check would
+ * otherwise stall the whole run, so it gets the same budget as everything else.
+ */
+async function runCheck(slug: string, page: Page): Promise<string[]> {
+	const file = path.resolve('playground', slug, 'check.ts');
+	if (!fs.existsSync(file)) return [];
+
+	const { default: check } = (await import(pathToFileURL(file).href)) as { default: ExampleCheck };
+
+	// Comfortably below the overall budget, so a missing element is reported as the
+	// selector that never appeared rather than as an anonymous overall timeout.
+	page.setDefaultTimeout(TIMEOUT / 2);
+
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	try {
+		await Promise.race([
+			check({ page, preview: await previewFrame(page) }),
+			new Promise((_, reject) => {
+				timer = setTimeout(
+					() => reject(new Error(`check timed out after ${TIMEOUT} ms`)),
+					TIMEOUT,
+				);
+			}),
+		]);
+		return [];
+	} catch (err) {
+		return [`check failed: ${describe(err)}`];
+	} finally {
+		clearTimeout(timer);
+	}
 }
 
 async function checkExample(browser: Browser, slug: string): Promise<string[]> {
@@ -56,6 +93,8 @@ async function checkExample(browser: Browser, slug: string): Promise<string[]> {
 
 		if (!(await waitForMapRendered(page, tracker, { timeoutMs: TIMEOUT }))) {
 			problems.push('map never finished rendering (canvas stayed blank or kept changing)');
+		} else {
+			problems.push(...(await runCheck(slug, page)));
 		}
 	} catch (err) {
 		problems.push(describe(err));

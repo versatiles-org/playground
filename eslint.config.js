@@ -6,7 +6,6 @@ export default [
 		ignores: [
 			'docs/**',
 			'node_modules/**',
-			'playground/**',
 			'eslint.config.js',
 		],
 	},
