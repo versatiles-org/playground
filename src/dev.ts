@@ -26,6 +26,23 @@ const server = http.createServer((req, res) => {
 const preferredPort = Number(process.env.PORT) || 8080;
 
 /**
+ * One fixed interface, addressed by literal IP rather than by name.
+ *
+ * Binding the wildcard address and browsing to `localhost` is not the same port:
+ * `localhost` resolves to ::1 first, so an unrelated process holding *only*
+ * `[::1]:8080` — another project's dev server — is reached instead of this one,
+ * while our own wildcard bind succeeds and reports no conflict. Every test then
+ * loads a stranger's page and fails on a missing selector, naming the markup
+ * rather than the collision. Pinning both ends to 127.0.0.1 removes the
+ * ambiguity: a conflicting listener now surfaces as EADDRINUSE, which the
+ * fallback below handles, and we can never talk to a server we did not start.
+ *
+ * 127.0.0.1 is a secure context, like `localhost`, so the geolocation check
+ * still gets its permission prompt.
+ */
+const HOST = '127.0.0.1';
+
+/**
  * Falls back to a free port when the preferred one is taken, so the tests still
  * run while a `npm run dev` server is open — otherwise they die on EADDRINUSE
  * for a reason that has nothing to do with what they test.
@@ -37,13 +54,13 @@ const port = await new Promise<number>((resolve, reject) => {
 	server.on('error', (err: NodeJS.ErrnoException) => {
 		if (err.code !== 'EADDRINUSE' || fallbackTried) return reject(err);
 		fallbackTried = true;
-		server.listen(0);
+		server.listen(0, HOST);
 	});
 
-	server.listen(preferredPort);
+	server.listen(preferredPort, HOST);
 });
 
-export const url = `http://localhost:${port}`;
+export const url = `http://${HOST}:${port}`;
 console.log(`Listening on ${url}`);
 
 function ignore(res: http.ServerResponse) {
