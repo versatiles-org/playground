@@ -14,25 +14,17 @@
 
 	<!-- Initialize the map -->
 	<script type="module">
-		// both options need our elevation tiles, so the style is built asynchronously
-		const style = await VersaTilesStyle.colorful({
-			baseUrl: 'https://tiles.versatiles.org', // base URL for tiles, sprites and fonts
-			terrain: { exaggeration: 1.5 }, // lift the map into the third dimension
-			hillshade: true, // shade the slopes, so the relief is visible from above too
+		const style = VersaTilesStyle.osm({
+			urls: { base: 'https://tiles.versatiles.org' }, // where tiles, sprites and fonts come from
+			features: {
+				terrain: { exaggeration: 1.5 }, // lift the map into the third dimension
+				hillshade: true, // shade the slopes, so the relief is visible from above too
+			},
 		});
-
-		// the generated style is a plain object: nothing is drawn above the horizon,
-		// so the map needs a sky of its own
-		style.sky = {
-			'sky-color': '#8bb7e0',
-			'horizon-color': '#dfeaf2',
-			'fog-color': '#dfeaf2',
-			'fog-ground-blend': 0.4,
-		};
 
 		new maplibregl.Map({
 			container: 'map',
-			style,
+			style: await VersaTilesStyle.inlineSources(style), // resolve the tile URLs
 			center: [7.6586, 45.9763], // Matterhorn
 			zoom: 12.2,
 			pitch: 75, // tilt the camera towards the horizon

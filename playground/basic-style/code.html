@@ -13,10 +13,11 @@
 	<div id="map" style="height:100vh"></div>
 
 	<!-- Initialize the map -->
-	<script>
-		const style = VersaTilesStyle.colorful({
-			baseUrl: 'https://tiles.versatiles.org', // base URL for tiles, sprites and fonts
-			language: 'de', // use german labels
+	<script type="module">
+		const style = VersaTilesStyle.osm({
+			urls: { base: 'https://tiles.versatiles.org' }, // where tiles, sprites and fonts come from
+			theme: 'colorful', // one of five palettes, each also available as "…-dark"
+			text: { language: 'de' }, // use german labels
 			colors: {
 				label: '#000', // render all labels in black
 			},
@@ -31,7 +32,7 @@
 		// start the map with the generated VersaTiles style
 		new maplibregl.Map({
 			container: 'map',
-			style,
+			style: await VersaTilesStyle.inlineSources(style), // resolve the tile URLs
 			bounds: [-12, 35, 41, 60],
 		});
 	</script>

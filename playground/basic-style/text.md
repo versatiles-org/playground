@@ -14,46 +14,56 @@ We host versatiles-style at a predictable path on `tiles.versatiles.org` (see ou
 Loading the library adds the global `VersaTilesStyle` to the JavaScript environment. To generate a style:
 
 ```javascript
-const style = VersaTilesStyle.colorful(); // <- generates a style
+const style = VersaTilesStyle.osm({
+	urls: { base: 'https://tiles.versatiles.org' }, // <- where tiles, sprites and fonts come from
+});
 
 new maplibregl.Map({
 	container: 'map',
-	style, // <- use the style
+	style: await VersaTilesStyle.inlineSources(style), // <- use the style
 })
 ```
 
-In this example we additionally use German labels (`language: 'de'`), render labels in black (`colors.label`), and reduce the overall saturation (`recolor.saturate`).
+In this example we additionally use German labels (`text.language`), render labels in black (`colors.label`), and reduce the overall saturation (`recolor.saturate`).
 
-We provide several base styles for different use cases:
+> [!IMPORTANT]
+> Two things are easy to leave out, and both end in a blank map:
+>
+> - **Set `urls.base`.** Every other URL in the style — tiles, sprites, glyphs — is resolved against it, and it defaults to *your page's own origin*. That is the right default once you host the tiles yourself, but on any other page it points the map at a server that has no `/tiles/` or `/assets/`.
+> - **Pass the style through `inlineSources()`.** `osm()` is synchronous and does no network requests: it leaves each source as a reference to a [TileJSON](https://github.com/mapbox/tilejson-spec) file, and ours list *relative* tile URLs that MapLibre cannot resolve. `inlineSources()` fetches them and folds in the absolute tile URLs, the zoom range and the attribution. Since it returns a `Promise`, this example uses `<script type="module">`: top-level `await` only works in modules.
+
+### Themes
+
+`osm()` renders OpenStreetMap vector tiles in one of five palettes, each also available as a dark theme with a `-dark` suffix (`colorful-dark`, …):
 
 - `colorful` — the default, rich colors
-- `eclipse` — dark mode
-- `graybeard` — grayscale
-- `neutrino` — minimal, low-contrast
+- `natural` — muted greens and browns
+- `muted` — minimal, low-contrast
+- `gray` — grayscale
+- `toner` — black and white
 
-Each takes the same options. See the [API documentation](https://versatiles.org/versatiles-style/index.html), in particular:
+See the [API documentation](https://versatiles.org/versatiles-style/index.html), in particular:
 
-- [StyleBuilderOptions](https://versatiles.org/versatiles-style/interfaces/StyleBuilderOptions.html) — all options the style functions accept.
-- [RecolorOptions](https://versatiles.org/versatiles-style/interfaces/RecolorOptions.html) — change brightness, contrast, saturation, gamma, etc.
-- [StyleBuilderColors](https://versatiles.org/versatiles-style/interfaces/StyleBuilderColors.html) — change individual colors.
+- [OsmOptions](https://versatiles.org/versatiles-style/types/_versatiles_style.OsmOptions.html) — all options `osm()` accepts.
+- [RecolorOptions](https://versatiles.org/versatiles-style/types/_versatiles_style.RecolorOptions.html) — change brightness, contrast, saturation, gamma, etc.
+- [ColorsOptions](https://versatiles.org/versatiles-style/types/_versatiles_style.ColorsOptions.html) — change individual colors.
 
 ### Going further: the "Matrix" effect
 
-Combining `hideLabels` and `recolor` produces stylized variants. The following gives you a green-tinted, label-free map that 90s movie fans will recognize:
+Combining `layers.labels` and `recolor` produces stylized variants. The following gives you a green-tinted, label-free map that 90s movie fans will recognize:
 
 ```javascript
-const style = VersaTilesStyle.colorful({
-	hideLabels: true,
+const style = VersaTilesStyle.osm({
+	layers: { labels: false },
 	recolor: {
 		invertBrightness: true,
-		tintColor: '#0A0',
-		tint: 1,
+		tint: { color: '#0A0', amount: 1 },
 	},
 });
 ```
 
 > [!NOTE]
-> [versatiles-style](https://github.com/versatiles-org/versatiles-style) is actively evolving. Expect API changes as we expand its capabilities.
+> [versatiles-style](https://github.com/versatiles-org/versatiles-style) is actively evolving. Expect API changes as we expand its capabilities — version 6 replaced the old style functions (`colorful`, `eclipse`, `graybeard`, `neutrino`) with `osm({ theme })` and regrouped the options.
 
 > [!WARNING]
 > Instead of loading the libraries from tiles.versatiles.org, we recommend including them directly in your project and hosting them yourself. Since we regularly update the front-end libraries on our demo server, future updates may affect your project.

@@ -8,14 +8,16 @@ Elevation data reaches the browser the same way [satellite imagery](../satellite
 [versatiles-style](https://github.com/versatiles-org/versatiles-style) sets this up for any of its styles:
 
 ```javascript
-const style = await VersaTilesStyle.colorful({
-	baseUrl: 'https://tiles.versatiles.org',
-	terrain: { exaggeration: 1.5 },
-	hillshade: true,
+const style = VersaTilesStyle.osm({
+	urls: { base: 'https://tiles.versatiles.org' },
+	features: {
+		terrain: { exaggeration: 1.5 },
+		hillshade: true,
+	},
 });
 ```
 
-As with `satellite()`, the result is a Promise: the elevation [TileJSON](https://github.com/mapbox/tilejson-spec) has to be fetched first, so the source ends up with the right zoom range, attribution — and encoding.
+As with [`satellite()`](../satellite/), the style then goes through `inlineSources()`: that fetches the elevation [TileJSON](https://github.com/mapbox/tilejson-spec), so the source ends up with the right zoom range, attribution — and encoding.
 
 ### Two ways to show relief
 
@@ -29,7 +31,7 @@ Terrain seen from straight above looks like an ordinary map, so this example sta
 
 `maxPitch: 85` is needed for anything beyond `pitch: 60` — MapLibre's default limit. Visitors tilt and rotate the map by dragging with the right mouse button, holding <kbd>Ctrl</kbd> while dragging, or using two fingers on a touchscreen.
 
-Above the horizon there is no map left to draw, which is why the example gives the style a `sky`. Without it that part of the canvas simply stays empty.
+Above the horizon there is no map left to draw, which is why every generated style carries a [`sky`](https://maplibre.org/maplibre-style-spec/sky/). Without it that part of the canvas would simply stay empty; pass `sky` to `osm()` to change its colors.
 
 ### Using your own elevation tiles
 

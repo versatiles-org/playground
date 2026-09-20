@@ -9,18 +9,18 @@ A `symbol` layer is the other approach: the points live in a source, MapLibre re
 
 ### Icons
 
-`icon-image` names an image in the style's [sprite](https://maplibre.org/maplibre-style-spec/sprite/) — a single sheet holding all icons. Our styles load the sprite `basics`, which contains around 110 images, all named `icon-…` ([have a look](https://tiles.versatiles.org/assets/sprites/basics/sprites.png)).
+`icon-image` names an image in the style's [sprite](https://maplibre.org/maplibre-style-spec/sprite/) — a single sheet holding all icons. Our styles load the sprite `base`, which contains around 120 images, all named `icon-…` ([have a look](https://versatiles.org/versatiles-style/sprites.html)).
 
 > [!IMPORTANT]
-> Our styles declare their sprite as a *list*, which means every image id carries the sprite's name as a prefix: `basics:icon-windmill`, not `icon-windmill`. Without the prefix MapLibre silently draws no icon at all.
+> Our styles declare their sprite as a *list*, which means every image id carries the sprite's name as a prefix: `base:icon-windmill`, not `icon-windmill`. Without the prefix MapLibre silently draws no icon at all.
 
 Instead of a fixed id, this example builds the id from each feature's `kind` property:
 
 ```javascript
-'icon-image': ['concat', 'basics:icon-', ['get', 'kind']],
+'icon-image': ['concat', 'base:icon-', ['get', 'kind']],
 ```
 
-That is an [expression](https://maplibre.org/maplibre-style-spec/expressions/): a small formula MapLibre evaluates per feature. `['get', 'kind']` reads a property, `['concat', …]` glues strings together — so a windmill gets `basics:icon-windmill` and a lighthouse `basics:icon-lighthouse`. Almost every layout and paint property accepts expressions, which is what makes a single layer enough for differently styled features.
+That is an [expression](https://maplibre.org/maplibre-style-spec/expressions/): a small formula MapLibre evaluates per feature. `['get', 'kind']` reads a property, `['concat', …]` glues strings together — so a windmill gets `base:icon-windmill` and a lighthouse `base:icon-lighthouse`. Almost every layout and paint property accepts expressions, which is what makes a single layer enough for differently styled features.
 
 ### Labels
 
