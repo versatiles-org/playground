@@ -30,25 +30,25 @@
 		"esbuild": "^0.28.2",
 		"eta": "^4.6.0",
 		"gray-matter": "^4.0.3",
-		"marked": "^18.0.13",
+		"marked": "^18.1.0",
 		"marked-alert": "^2.1.2",
 		"pngjs": "^7.0.0",
 		"prismjs": "^1.30.0",
-		"puppeteer": "^25.11.0",
+		"puppeteer": "^25.12.0",
 		"serve-handler": "^6.1.7"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
-		"@types/node": "^26.6.2",
+		"@types/node": "^26.6.4",
 		"@types/pngjs": "^6.0.5",
 		"@types/prismjs": "^1.26.6",
 		"@types/serve-handler": "^6.1.4",
-		"eslint": "^10.11.0",
+		"eslint": "^10.12.0",
 		"npm-check-updates": "^23.1.0",
-		"prettier": "^3.9.8",
+		"prettier": "^3.9.9",
 		"tsx": "^4.23.15",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.70.0"
+		"typescript-eslint": "^8.71.1"
 	},
 	"allowScripts": {
 		"esbuild": true,
