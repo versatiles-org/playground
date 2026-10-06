@@ -19,6 +19,4 @@ Loading the MapLibre library adds the global `maplibregl` variable to the JavaSc
 
 You can set the initial view by passing either `bounds: [west, south, east, north]` (as in this example) or `center: [lng, lat]` with `zoom`.
 
-The call to `maplibregl.setRTLTextPlugin(...)` registers an optional plugin so MapLibre can render right-to-left scripts (Arabic, Hebrew) correctly. Skip it if your maps never show those languages.
-
 To learn more about all the options provided by MapLibre, take a look at the documentation for the [Map class documentation](https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/) and in general the [MapLibre API documentation](https://maplibre.org/maplibre-gl-js/docs/API/). We can also highly recommend all the [MapLibre examples](https://maplibre.org/maplibre-gl-js/docs/examples/).
