@@ -26,7 +26,7 @@
 	},
 	"dependencies": {
 		"cheerio_cms": "^1.1.0",
-		"codejar": "^4.3.0",
+		"codejar": "^5.0.0",
 		"esbuild": "^0.28.2",
 		"eta": "^4.6.0",
 		"gray-matter": "^4.0.3",
